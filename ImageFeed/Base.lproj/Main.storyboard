@@ -50,7 +50,7 @@
                                                     </buttonConfiguration>
                                                 </button>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d6y-zl-0Qh">
-                                                    <rect key="frame" x="16" y="97" width="382" height="44"/>
+                                                    <rect key="frame" x="16" y="105" width="382" height="36"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="27 августа 2022" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DGh-rv-rGG">
                                                             <rect key="frame" x="16" y="12" width="101.5" height="16"/>
@@ -62,7 +62,6 @@
                                                     <constraints>
                                                         <constraint firstItem="DGh-rv-rGG" firstAttribute="top" secondItem="d6y-zl-0Qh" secondAttribute="topMargin" constant="4" id="3jJ-iV-y2h"/>
                                                         <constraint firstItem="DGh-rv-rGG" firstAttribute="leading" secondItem="d6y-zl-0Qh" secondAttribute="leadingMargin" constant="8" id="DCg-zX-JTp"/>
-                                                        <constraint firstAttribute="bottomMargin" secondItem="DGh-rv-rGG" secondAttribute="bottom" constant="8" id="QW7-64-tqg"/>
                                                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="DGh-rv-rGG" secondAttribute="trailing" constant="20" symbolic="YES" id="V1m-jL-YyY"/>
                                                     </constraints>
                                                     <userDefinedRuntimeAttributes>
@@ -73,6 +72,7 @@
                                             <color key="backgroundColor" name="YP Black"/>
                                             <constraints>
                                                 <constraint firstItem="fH4-ea-jDS" firstAttribute="leading" secondItem="MCJ-2o-LOL" secondAttribute="leading" constant="16" id="1NE-Ud-cbC"/>
+                                                <constraint firstAttribute="bottom" secondItem="DGh-rv-rGG" secondAttribute="bottom" constant="8" id="4GV-Z7-QFz"/>
                                                 <constraint firstItem="d6y-zl-0Qh" firstAttribute="bottom" secondItem="fH4-ea-jDS" secondAttribute="bottom" id="GmN-pZ-ynv"/>
                                                 <constraint firstItem="d6y-zl-0Qh" firstAttribute="trailing" secondItem="fH4-ea-jDS" secondAttribute="trailing" id="Jww-39-nUD"/>
                                                 <constraint firstAttribute="trailing" secondItem="fH4-ea-jDS" secondAttribute="trailing" constant="16" id="Kz8-eG-Ugv"/>
