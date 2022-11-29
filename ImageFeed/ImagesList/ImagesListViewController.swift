@@ -2,7 +2,7 @@ import UIKit
 
 class ImagesListViewController: UIViewController {
     private var photosNames = [String]()
-    let gradientLayer = CAGradientLayer()
+    
     
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -18,22 +18,21 @@ class ImagesListViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         
-        photosNames = ["blue", "blue", "blue", "blue", "blue"]
-//        photosNames = Array(0..<20).map{ "\($0)" }
+        photosNames = Array(0..<20).map{ "\($0)" }
     }
     
     func configGradient(for cell: ImagesListCell) {
+        let gradientLayer = CAGradientLayer()
+        
         gradientLayer.colors = [
             UIColor(red: 0.102, green: 0.106, blue: 0.133, alpha: 0).cgColor,
-            UIColor(red: 0.102, green: 0.106, blue: 0.133, alpha: 1).cgColor
+            UIColor(red: 0.102, green: 0.106, blue: 0.133, alpha: 0.5).cgColor
         ]
         
         gradientLayer.locations = [0, 1]
        
-        gradientLayer.bounds = cell.gradientViewCell.bounds.insetBy(
-            dx: -0.5 * cell.gradientViewCell.bounds.size.width,
-            dy: -0.5 * cell.gradientViewCell.bounds.size.height
-        )
+        gradientLayer.frame = cell.gradientViewCell.bounds
+        
         cell.gradientViewCell.layer.insertSublayer(gradientLayer, at: 0)
     }
     
@@ -50,7 +49,6 @@ class ImagesListViewController: UIViewController {
         }
         
         configGradient(for: cell)
-        
     }
 }
 
@@ -67,7 +65,6 @@ extension ImagesListViewController: UITableViewDataSource {
         guard let imageListCell = cell as? ImagesListCell else {
             return UITableViewCell()
         }
-        
         
         configCell(for: imageListCell, with: indexPath)
         

@@ -7,9 +7,4 @@ final class ImagesListCell: UITableViewCell {
     @IBOutlet var dateLabelCell: UILabel!
     @IBOutlet var gradientViewCell: UIView!
     @IBOutlet var likeButtonCell: UIButton!
-    
-//    override func prepareForReuse() {
-//        super.prepareForReuse()
-//        self.gradientViewCell = nil
-//    }
 }
