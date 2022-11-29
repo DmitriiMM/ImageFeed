@@ -18,10 +18,11 @@ class ImagesListViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         
-        photosNames = Array(0..<20).map{ "\($0)" }
+        photosNames = ["blue", "blue", "blue", "blue", "blue"]
+//        photosNames = Array(0..<20).map{ "\($0)" }
     }
     
-    func configGradient(cell: ImagesListCell) {
+    func configGradient(for cell: ImagesListCell) {
         gradientLayer.colors = [
             UIColor(red: 0.102, green: 0.106, blue: 0.133, alpha: 0).cgColor,
             UIColor(red: 0.102, green: 0.106, blue: 0.133, alpha: 1).cgColor
@@ -30,9 +31,10 @@ class ImagesListViewController: UIViewController {
         gradientLayer.locations = [0, 1]
        
         gradientLayer.bounds = cell.gradientViewCell.bounds.insetBy(
-            dx: -1 * cell.gradientViewCell.bounds.size.width,
-            dy: -1 * cell.gradientViewCell.bounds.size.height
+            dx: -0.5 * cell.gradientViewCell.bounds.size.width,
+            dy: -0.5 * cell.gradientViewCell.bounds.size.height
         )
+        cell.gradientViewCell.layer.insertSublayer(gradientLayer, at: 0)
     }
     
     
@@ -47,6 +49,7 @@ class ImagesListViewController: UIViewController {
             cell.likeButtonCell.imageView?.image = UIImage(named: "NoActive")
         }
         
+        configGradient(for: cell)
         
     }
 }
@@ -67,8 +70,6 @@ extension ImagesListViewController: UITableViewDataSource {
         
         
         configCell(for: imageListCell, with: indexPath)
-        configGradient(cell: imageListCell)
-        imageListCell.gradientViewCell.layer.addSublayer(gradientLayer)
         
         return imageListCell
     }
