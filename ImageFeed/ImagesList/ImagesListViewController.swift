@@ -22,18 +22,16 @@ class ImagesListViewController: UIViewController {
     }
     
     func configGradient(for cell: ImagesListCell) {
-        let gradientLayer = CAGradientLayer()
-        
-        gradientLayer.colors = [
+        cell.gradientLayer.colors = [
             UIColor(red: 0.102, green: 0.106, blue: 0.133, alpha: 0).cgColor,
             UIColor(red: 0.102, green: 0.106, blue: 0.133, alpha: 0.5).cgColor
         ]
         
-        gradientLayer.locations = [0, 1]
+        cell.gradientLayer.locations = [0, 1]
        
-        gradientLayer.frame = cell.gradientViewCell.bounds
+        cell.gradientLayer.frame = cell.gradientViewCell.bounds
         
-        cell.gradientViewCell.layer.insertSublayer(gradientLayer, at: 0)
+        cell.gradientViewCell.layer.insertSublayer(cell.gradientLayer, at: 0)
     }
     
     
