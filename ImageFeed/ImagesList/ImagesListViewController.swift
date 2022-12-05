@@ -2,7 +2,7 @@ import UIKit
 
 class ImagesListViewController: UIViewController {
     private var photosNames = [String]()
-    
+    private let showSingleImageSegueIdentifier = "ShowSingleImage"
     
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -15,10 +15,18 @@ class ImagesListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.delegate = self
-        tableView.dataSource = self
-        
         photosNames = Array(0..<20).map{ "\($0)" }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == showSingleImageSegueIdentifier {
+            let viewController = segue.destination as! SingleImageViewController
+            let indexPath = sender as! IndexPath
+            let image = UIImage(named: photosNames[indexPath.row])
+            viewController.image = image
+        } else {
+            prepare(for: segue, sender: sender)
+        }
     }
     
     func configGradient(for cell: ImagesListCell) {
@@ -50,7 +58,11 @@ class ImagesListViewController: UIViewController {
     }
 }
 
-extension ImagesListViewController: UITableViewDelegate {}
+extension ImagesListViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: showSingleImageSegueIdentifier, sender: indexPath)
+    }
+}
 
 extension ImagesListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
