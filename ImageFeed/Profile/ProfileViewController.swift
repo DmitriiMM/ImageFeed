@@ -1,14 +1,14 @@
 import UIKit
 
 class ProfileViewController: UIViewController {
-    private var profileImageView: UIImageView = {
+    private lazy var profileImageView: UIImageView = {
         let image = UIImage(systemName: "person.crop.circle.fill")
         let imageView = UIImageView(image: image)
         imageView.tintColor = .gray
         return imageView
     }()
     
-    private var profileNameLabel: UILabel = {
+    private lazy var profileNameLabel: UILabel = {
         let label = UILabel()
         label.text = "Екатерина Новикова"
         label.font = UIFont.systemFont(ofSize: 23, weight: .bold)
@@ -16,7 +16,7 @@ class ProfileViewController: UIViewController {
         return label
     }()
     
-    private var profileLinkLabel: UILabel = {
+    private lazy var profileLinkLabel: UILabel = {
         let label = UILabel()
         label.text = "@ekaterina_nov"
         label.font = UIFont.systemFont(ofSize: 13)
@@ -24,7 +24,7 @@ class ProfileViewController: UIViewController {
         return label
     }()
     
-    private var profileDescriptionLabel: UILabel = {
+    private lazy var profileDescriptionLabel: UILabel = {
         let label = UILabel()
         label.text = "Hello, world!"
         label.font = UIFont.systemFont(ofSize: 13)
@@ -32,10 +32,10 @@ class ProfileViewController: UIViewController {
         return label
     }()
     
-    private var logoutButton: UIButton = {
-        let image = UIImage(systemName: "ipad.and.arrow.forward")!
+    private lazy var logoutButton: UIButton = {
+        let image = UIImage(named: "Exit")
         let button = UIButton.systemButton(
-            with: image,
+            with: image ?? UIImage(systemName: "ipad.and.arrow.forward")!,
             target: self,
             action: #selector(logOutButtonTapped)
         )
@@ -51,7 +51,7 @@ class ProfileViewController: UIViewController {
         addConstraints()
     }
     
-    func addConstraints() {
+    private func addConstraints() {
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
         profileNameLabel.translatesAutoresizingMaskIntoConstraints = false
         profileLinkLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -74,11 +74,11 @@ class ProfileViewController: UIViewController {
             profileDescriptionLabel.leadingAnchor.constraint(equalTo: profileImageView.leadingAnchor),
             
             logoutButton.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor),
-            logoutButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -26)
+            logoutButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -24)
         ])
     }
     
-    func  addSubViews() {
+    private func addSubViews() {
         view.addSubview(profileImageView)
         view.addSubview(profileNameLabel)
         view.addSubview(profileLinkLabel)
@@ -86,5 +86,5 @@ class ProfileViewController: UIViewController {
         view.addSubview(logoutButton)
     }
     
-    @objc func logOutButtonTapped(_ sender: Any) {}
+    @objc private func logOutButtonTapped(_ sender: Any) { }
 }
