@@ -28,10 +28,9 @@ class OAuth2Service {
                     response.statusCode > 200 || response.statusCode <= 300 else { return }
                 do {
                     let responseBody = try JSONDecoder().decode(OAuthTokenResponseBody.self, from: data)
-                    print("🥎🥎🥎ПРИШЛА ДАТА!\(responseBody)🥎🥎🥎")
                     completion(.success(responseBody.accessTocken))
                 } catch {
-                    print("🥎🥎🥎ДАТА НЕ ПРИШЛА -  ОШИБКА - \(error.localizedDescription)🥎🥎🥎")
+                    print("\(error.localizedDescription)")
                 }
             }
             session.resume()

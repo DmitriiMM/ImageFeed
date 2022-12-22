@@ -9,11 +9,7 @@ class OAuth2TokenStorage {
         }
         
         set {
-            guard let data = newValue else {
-                print("🥎🥎🥎Невозможно сохранить результат")
-                return
-            }
-            print("🥎🥎🥎New setting value is \(String(describing: newValue))")
+            guard let data = newValue else { return }
             userDefaults.set(data, forKey: Keys.token.rawValue)
         }
     }

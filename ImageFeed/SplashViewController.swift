@@ -9,13 +9,10 @@ final class SplashViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        if let token = oauth2TokenStorage.token {
-            print("🥎🥎🥎YOUR TOKEN was-------> \(OAuth2TokenStorage().token)")
-            print("🥎🥎🥎YOUR TOKEN now-------> \(token)")
+        if oauth2TokenStorage.token != nil {
             switchToTabBarController()
         } else {
             performSegue(withIdentifier: ShowAuthenticationScreenSegueIdentifier, sender: nil)
-        print("🥎🥎🥎performSegue отработал!")
         }
     }
 
@@ -56,7 +53,6 @@ extension SplashViewController: AuthViewControllerDelegate {
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
         dismiss(animated: true) { [weak self] in
             guard let self = self else { return }
-            print("🥎🥎🥎отправлена команда на ПОСТ запрос")
             self.fetchOAuthToken(code)
         }
     }
@@ -66,11 +62,7 @@ extension SplashViewController: AuthViewControllerDelegate {
             guard let self = self else { return }
             switch result {
             case .success(let bearerToken):
-                print("🥎🥎🥎🥎🥎сейчас отработает запись беарертокена")
-                print("🥎🥎🥎До записи беар токена \(self.oauth2TokenStorage.token) или дескрипшн \(self.oauth2TokenStorage.token?.description)")
                 self.oauth2TokenStorage.store(token: bearerToken)
-                print("🥎🥎🥎ПОСЛЕ записи беар токена \(self.oauth2TokenStorage.token) или дескрипшн \(self.oauth2TokenStorage.token?.description)")
-                print("🥎🥎🥎🥎🥎беарертокен должен только ччто записаться")
                 self.switchToTabBarController()
             case .failure:
                 // TODO [Sprint 11]
