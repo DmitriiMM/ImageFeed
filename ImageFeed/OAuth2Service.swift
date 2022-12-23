@@ -20,20 +20,18 @@ class OAuth2Service {
         guard let httpBody = try? JSONSerialization.data(withJSONObject: parameters) else { return }
         request.httpBody = httpBody
         
-        DispatchQueue.main.async {
-            let session = URLSession.shared.dataTask(with: request) { data, response, error in
-                guard
-                    let response = response as? HTTPURLResponse,
-                    let data = data,
-                    response.statusCode > 200 || response.statusCode <= 300 else { return }
-                do {
-                    let responseBody = try JSONDecoder().decode(OAuthTokenResponseBody.self, from: data)
-                    completion(.success(responseBody.accessTocken))
-                } catch {
-                    print("\(error.localizedDescription)")
-                }
+        let session = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard
+                let response = response as? HTTPURLResponse,
+                let data = data,
+                response.statusCode > 200 || response.statusCode <= 300 else { return }
+            do {
+                let responseBody = try JSONDecoder().decode(OAuthTokenResponseBody.self, from: data)
+                completion(.success(responseBody.accessTocken))
+            } catch {
+                print("\(error.localizedDescription)")
             }
-            session.resume()
         }
+        session.resume()
     }
 }
