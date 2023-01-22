@@ -6,11 +6,14 @@ final class SplashViewController: UIViewController {
 
     private let oauth2Service = OAuth2Service()
     private let oauth2TokenStorage = OAuth2TokenStorage()
+    
+    private let profileService = ProfileService.shared
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        if oauth2TokenStorage.token != nil {
+        if let token = oauth2TokenStorage.token  {
+            fetchProfile(token: token)
             switchToTabBarController()
         } else {
             performSegue(withIdentifier: showAuthenticationScreenSegueIdentifier, sender: nil)
@@ -52,9 +55,9 @@ extension SplashViewController {
 
 extension SplashViewController: AuthViewControllerDelegate {
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
-        ProgressHUD.show()
         dismiss(animated: true) { [weak self] in
             guard let self = self else { return }
+            UIBlockingProgressHUD.show()
             self.fetchOAuthToken(code)
         }
     }
@@ -67,14 +70,28 @@ extension SplashViewController: AuthViewControllerDelegate {
                 case .success(let bearerToken):
                     self.oauth2TokenStorage.store(token: bearerToken)
                     self.switchToTabBarController()
-                    ProgressHUD.dismiss()
+                    UIBlockingProgressHUD.dismiss()
                 case .failure:
-                    ProgressHUD.dismiss()
+                    UIBlockingProgressHUD.dismiss()
                     // TODO Показать ошибку
                     break
                 }
             }
         }
     }
+    
+    private func fetchProfile(token: String) {
+        profileService.fetchProfile(token) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success:
+                UIBlockingProgressHUD.dismiss()
+                self.switchToTabBarController()
+            case .failure:
+                UIBlockingProgressHUD.dismiss()
+                // TODO [Sprint 11] Показать ошибку
+                break
+            }
+        }
+    }
 }
-

@@ -1,6 +1,10 @@
 import UIKit
 
 class ProfileViewController: UIViewController {
+    
+    private let profileService = ProfileService.shared
+    private let tokenStorage = OAuth2TokenStorage()
+    
     private lazy var profileImageView: UIImageView = {
         let image = UIImage(systemName: "person.crop.circle.fill")
         let imageView = UIImageView(image: image)
@@ -46,7 +50,9 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "YP Black")
-        
+     
+        guard let profile = profileService.profile else { return }
+        updateProfileDetails(profile: profile)
         addSubViews()
         addConstraints()
     }
@@ -87,4 +93,10 @@ class ProfileViewController: UIViewController {
     }
     
     @objc private func logOutButtonTapped(_ sender: Any) { }
+    
+    func updateProfileDetails(profile: Profile) {
+        self.profileNameLabel.text = profile.name
+        self.profileLinkLabel.text = profile.loginName
+        self.profileDescriptionLabel.text = profile.bio
+    }
 }
