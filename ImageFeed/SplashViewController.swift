@@ -8,6 +8,7 @@ final class SplashViewController: UIViewController {
     private let oauth2TokenStorage = OAuth2TokenStorage()
     
     private let profileService = ProfileService.shared
+    private let profileImageService = ProfileImageService.shared
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -73,8 +74,10 @@ extension SplashViewController: AuthViewControllerDelegate {
                     UIBlockingProgressHUD.dismiss()
                 case .failure:
                     UIBlockingProgressHUD.dismiss()
-                    // TODO Показать ошибку
-                    break
+                    let alert = UIAlertController(title: "Что-то пошло не так(", message: "Не удалось войти в систему", preferredStyle: .alert)
+                    let action = UIAlertAction(title: "Ок", style: .cancel)
+                    alert.addAction(action)
+                    self.present(alert, animated: true)
                 }
             }
         }
@@ -84,9 +87,10 @@ extension SplashViewController: AuthViewControllerDelegate {
         profileService.fetchProfile(token) { [weak self] result in
             guard let self = self else { return }
             switch result {
-            case .success:
+            case .success(let profile):
                 UIBlockingProgressHUD.dismiss()
                 self.switchToTabBarController()
+                self.profileImageService.fetchProfileImageURL(username: profile.username) { _ in  }
             case .failure:
                 UIBlockingProgressHUD.dismiss()
                 // TODO [Sprint 11] Показать ошибку
