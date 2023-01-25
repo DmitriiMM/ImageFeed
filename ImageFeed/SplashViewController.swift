@@ -70,32 +70,36 @@ extension SplashViewController: AuthViewControllerDelegate {
                 switch result {
                 case .success(let bearerToken):
                     self.oauth2TokenStorage.store(token: bearerToken)
+                    self.fetchProfile(token: bearerToken)
                     self.switchToTabBarController()
                     UIBlockingProgressHUD.dismiss()
                 case .failure:
                     UIBlockingProgressHUD.dismiss()
-                    let alert = UIAlertController(title: "Что-то пошло не так(", message: "Не удалось войти в систему", preferredStyle: .alert)
-                    let action = UIAlertAction(title: "Ок", style: .cancel)
-                    alert.addAction(action)
-                    self.present(alert, animated: true)
+                    self.showAlert()
                 }
             }
         }
     }
     
     private func fetchProfile(token: String) {
-        profileService.fetchProfile(token) { [weak self] result in
-            guard let self = self else { return }
+        profileService.fetchProfile(token) { result in
             switch result {
             case .success(let profile):
-                UIBlockingProgressHUD.dismiss()
-                self.switchToTabBarController()
                 self.profileImageService.fetchProfileImageURL(username: profile.username) { _ in  }
-            case .failure:
-                UIBlockingProgressHUD.dismiss()
+                self.switchToTabBarController()
+            case .failure(let error):
+                print("\(error)ererrrrrrroooooror 🎟️🎟️🎟️ ")
                 // TODO [Sprint 11] Показать ошибку
                 break
             }
+            UIBlockingProgressHUD.dismiss()
         }
+    }
+    
+    private func showAlert() {
+        let alert = UIAlertController(title: "Что-то пошло не так(", message: "Не удалось войти в систему", preferredStyle: .alert)
+        let action = UIAlertAction(title: "Ок", style: .cancel)
+        alert.addAction(action)
+        self.present(alert, animated: true)
     }
 }

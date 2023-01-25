@@ -1,4 +1,5 @@
 import UIKit
+import Kingfisher
 
 class ProfileViewController: UIViewController {
     
@@ -48,83 +49,40 @@ class ProfileViewController: UIViewController {
     }()
     
     private var profileImageServiceObserver: NSObjectProtocol?
-    
-    override init(nibName: String?, bundle: Bundle?) {
-           super.init(nibName: nibName, bundle: bundle)
-           addObserver()
-       }
-       
-       required init?(coder: NSCoder) {
-           super.init(coder: coder)
-           addObserver()
-       }
-       
-       deinit {
-           removeObserver()
-       }
-       
-       private func addObserver() {
-           NotificationCenter.default.addObserver(
-               self,
-               selector: #selector(updateAvatar(notification:)),
-               name: ProfileImageService.didChangeNotification,
-               object: nil)
-       }
-      
-      private func removeObserver() {
-           NotificationCenter.default.removeObserver(
-               self,
-               name: ProfileImageService.didChangeNotification,
-               object: nil)
-       }
-      
-       @objc
-       private func updateAvatar(notification: Notification) {
-           guard
-               isViewLoaded,
-               let userInfo = notification.userInfo,
-               let profileImageURL = userInfo["URL"] as? String,
-               let url = URL(string: profileImageURL)
-           else { return }
-           
-           // TODO [Sprint 11] Обновить аватар, используя Kingfisher
-       }
-       
        
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        if let avatarURL = ProfileImageService.shared.avatarURL,// 16
-                   let url = URL(string: avatarURL) {                   // 17
-                    // TODO [Sprint 11]  Обновить аватар, если нотификация была опубликована до того, как мы подписались.
-                }
-        
         view.backgroundColor = UIColor(named: "YP Black")
-     
-        guard let profile = profileService.profile else { return }
-        updateProfileDetails(profile: profile)
+        
         addSubViews()
         addConstraints()
         
+        guard let profile = profileService.profile else { return }
+        updateProfileDetails(profile: profile)
+        
         profileImageServiceObserver = NotificationCenter.default
-                   .addObserver(
-                       forName: ProfileImageService.didChangeNotification,
-                       object: nil,
-                       queue: .main
-                   ) { [weak self] _ in
-                       guard let self = self else { return }
-                       self.updateAvatar()
-                   }
-               updateAvatar()
+            .addObserver(
+                forName: ProfileImageService.didChangeNotification,
+                object: nil,
+                queue: .main
+            ) { [weak self] _ in
+                guard let self = self else { return }
+                self.updateAvatar()
+            }
+        updateAvatar()
     }
     
     private func updateAvatar() {
-           guard
-               let profileImageURL = ProfileImageService.shared.avatarURL,
-               let url = URL(string: profileImageURL)
-           else { return }
-           // TODO [Sprint 11] Обновить аватар, используя Kingfisher
-       }
+        guard
+            let avatarURL = ProfileImageService.shared.avatarURL,
+            let url = URL(string: avatarURL)
+        else { return }
+        profileImageView.kf.setImage(with: url, options: [
+            .processor(RoundCornerImageProcessor(cornerRadius: 16, backgroundColor: .clear)),
+            .cacheSerializer(FormatIndicatedCacheSerializer.png)
+        ])
+        profileImageView.clipsToBounds = true
+    }
     
     private func addConstraints() {
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
