@@ -21,7 +21,9 @@ final class SplashViewController: UIViewController {
             UIBlockingProgressHUD.show()
             fetchProfile(token: token)
         } else {
-            guard let authViewController = storyboard?.instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController else { return }
+            let storyboard = UIStoryboard(name: "Main", bundle: .main)
+            guard
+                let authViewController = storyboard.instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController else { return }
             authViewController.delegate = self
             authViewController.modalPresentationStyle = .fullScreen
             self.present(authViewController, animated: true)
@@ -55,7 +57,6 @@ final class SplashViewController: UIViewController {
 }
 
 extension SplashViewController {
-    
     private func addLogoConstraints() {
         logo.translatesAutoresizingMaskIntoConstraints = false
         
@@ -85,9 +86,9 @@ extension SplashViewController: AuthViewControllerDelegate {
                     self.fetchProfile(token: bearerToken)
                     self.switchToTabBarController()
                     UIBlockingProgressHUD.dismiss()
-                case .failure:
+                case .failure(let error):
                     UIBlockingProgressHUD.dismiss()
-                    self.showAlert()
+                    self.showAlert(with: error)
                 }
             }
         }
@@ -100,16 +101,20 @@ extension SplashViewController: AuthViewControllerDelegate {
                 self.profileImageService.fetchProfileImageURL(username: profile.username) { _ in  }
                 self.switchToTabBarController()
             case .failure(let error):
-                print("\(error)ererrrrrrroooooror 🎟️🎟️🎟️ ")
-                // TODO [Sprint 11] Показать ошибку
-                break
+                DispatchQueue.main.async {
+                    guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
+                    window.rootViewController = self
+                    window.makeKeyAndVisible()
+                    self.showAlert(with: error)
+                    UIBlockingProgressHUD.dismiss()
+                }
             }
             UIBlockingProgressHUD.dismiss()
         }
     }
     
-    private func showAlert() {
-        let alert = UIAlertController(title: "Что-то пошло не так(", message: "Не удалось войти в систему", preferredStyle: .alert)
+    private func showAlert(with error: Error) {
+        let alert = UIAlertController(title: "Что-то пошло не так(", message: "Не удалось войти в систему. Ошибка - \(error)", preferredStyle: .alert)
         let action = UIAlertAction(title: "Ок", style: .cancel)
         alert.addAction(action)
         self.present(alert, animated: true)

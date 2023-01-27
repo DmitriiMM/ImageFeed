@@ -21,6 +21,12 @@ final class ProfileService {
     private(set) var profile: Profile?
     static let shared = ProfileService()
     
+    private init(task: URLSessionTask? = nil, lastCode: String? = nil, profile: Profile? = nil) {
+        self.task = task
+        self.lastCode = lastCode
+        self.profile = profile
+    }
+    
     func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
         assert(Thread.isMainThread)
         if lastCode == token { return }

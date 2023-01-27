@@ -9,7 +9,7 @@ protocol WebViewViewControllerDelegate: AnyObject {
 fileprivate let UnsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
 
 
-class WebViewViewController: UIViewController {
+final class WebViewViewController: UIViewController {
     @IBOutlet private var webView: WKWebView!
     @IBOutlet private var progressView: UIProgressView!
     
@@ -20,12 +20,12 @@ class WebViewViewController: UIViewController {
     
     override func viewDidLoad() {
         estimatedProgressObservation = webView.observe(
-                   \.estimatedProgress,
-                   options: [],
-                   changeHandler: { [weak self] _, _ in
-                       guard let self = self else { return }
-                       self.updateProgress()
-                   })
+            \.estimatedProgress,
+             options: [],
+             changeHandler: { [weak self] _, _ in
+                 guard let self = self else { return }
+                 self.updateProgress()
+             })
         webView.navigationDelegate = self
         
         var urlComponents = URLComponents(string: UnsplashAuthorizeURLString)!
@@ -39,7 +39,7 @@ class WebViewViewController: UIViewController {
         let request = URLRequest(url: url)
         webView.load(request)
     }
-        private func updateProgress() {
+    private func updateProgress() {
         progressView.progress = Float(webView.estimatedProgress)
         progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
     }

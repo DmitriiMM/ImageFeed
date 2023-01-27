@@ -213,7 +213,7 @@
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KOX-UN-2ft" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-104" y="-700"/>
+            <point key="canvasLocation" x="842" y="-700"/>
         </scene>
         <!--Auth View Controller-->
         <scene sceneID="o0O-Yj-Hff">
@@ -326,48 +326,6 @@
             </objects>
             <point key="canvasLocation" x="2577" y="-1422"/>
         </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="n9k-yX-OGw">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="uew-yU-buh" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="" image="tab_editorial_active" id="Wrb-7n-L1b"/>
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="HET-4S-F9Z">
-                        <rect key="frame" x="0.0" y="48" width="414" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" name="YP White"/>
-                        <color key="barTintColor" name="YP White"/>
-                        <navigationBarAppearance key="standardAppearance">
-                            <color key="backgroundColor" name="YP Black"/>
-                        </navigationBarAppearance>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="572-7g-eYY"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="E2e-Vd-X8S" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="808.69565217391312" y="-700.44642857142856"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="CWG-LH-5HO">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="2GE-Sl-Evz" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Vxf-7Z-jIe">
-                        <rect key="frame" x="0.0" y="48" width="414" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="QYI-ko-yXp" kind="relationship" relationship="rootViewController" id="WvA-CW-uVo"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="WCo-Hm-zhE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="809" y="-1422"/>
-        </scene>
     </scenes>
     <resources>
         <image name="0" width="200" height="132"/>
@@ -375,7 +333,6 @@
         <image name="buttonSharing" width="51" height="51"/>
         <image name="chevron.backward" catalog="system" width="97" height="128"/>
         <image name="logoOfUnsplash" width="60" height="60"/>
-        <image name="tab_editorial_active" width="20" height="22"/>
         <namedColor name="YP Black">
             <color red="0.10199999809265137" green="0.10599999874830246" blue="0.13300000131130219" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

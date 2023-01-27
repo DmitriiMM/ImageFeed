@@ -1,6 +1,6 @@
 import Foundation
 
-class OAuth2Service {
+final class OAuth2Service {
     private var task: URLSessionTask?
     private var lastCode: String?
     
@@ -26,25 +26,25 @@ class OAuth2Service {
         }
         self.task = task
         task.resume()
+    }
+    
+    private func makeRequest(code: String) -> URLRequest {
+        let urlString = "https://unsplash.com/oauth/token"
+        guard let url = URL(string: urlString) else { fatalError("Failed to create URL") }
         
-        func makeRequest(code: String) -> URLRequest {
-            let urlString = "https://unsplash.com/oauth/token"
-            guard let url = URL(string: urlString) else { fatalError("Failed to create URL") }
-            
-            let parameters = [
-                "client_id": accessKey,
-                "client_secret": secretKey,
-                "redirect_uri": redirectURI,
-                "code": code,
-                "grant_type": "authorization_code"
-            ]
-            
-            var request = URLRequest(url: url)
-            request.httpMethod = "POST"
-            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-            guard let httpBody = try? JSONSerialization.data(withJSONObject: parameters) else { fatalError("Failed to parse data") }
-            request.httpBody = httpBody
-            return request
-        }
+        let parameters = [
+            "client_id": accessKey,
+            "client_secret": secretKey,
+            "redirect_uri": redirectURI,
+            "code": code,
+            "grant_type": "authorization_code"
+        ]
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        guard let httpBody = try? JSONSerialization.data(withJSONObject: parameters) else { fatalError("Failed to parse data") }
+        request.httpBody = httpBody
+        return request
     }
 }
