@@ -1,6 +1,11 @@
 import UIKit
+import Kingfisher
 
-class ProfileViewController: UIViewController {
+final class ProfileViewController: UIViewController {
+    
+    private let profileService = ProfileService.shared
+    private let tokenStorage = OAuth2TokenStorage()
+    
     private lazy var profileImageView: UIImageView = {
         let image = UIImage(systemName: "person.crop.circle.fill")
         let imageView = UIImageView(image: image)
@@ -43,12 +48,40 @@ class ProfileViewController: UIViewController {
         return button
     }()
     
+    private var profileImageServiceObserver: NSObjectProtocol?
+       
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "YP Black")
         
         addSubViews()
         addConstraints()
+        
+        guard let profile = profileService.profile else { return }
+        updateProfileDetails(profile: profile)
+        
+        profileImageServiceObserver = NotificationCenter.default
+            .addObserver(
+                forName: ProfileImageService.didChangeNotification,
+                object: nil,
+                queue: .main
+            ) { [weak self] _ in
+                guard let self = self else { return }
+                self.updateAvatar()
+            }
+        updateAvatar()
+    }
+    
+    private func updateAvatar() {
+        guard
+            let avatarURL = ProfileImageService.shared.avatarURL,
+            let url = URL(string: avatarURL)
+        else { return }
+        profileImageView.kf.setImage(with: url, options: [
+            .processor(RoundCornerImageProcessor(cornerRadius: 16, backgroundColor: .clear)),
+            .cacheSerializer(FormatIndicatedCacheSerializer.png)
+        ])
+        profileImageView.clipsToBounds = true
     }
     
     private func addConstraints() {
@@ -87,4 +120,10 @@ class ProfileViewController: UIViewController {
     }
     
     @objc private func logOutButtonTapped(_ sender: Any) { }
+    
+    func updateProfileDetails(profile: Profile) {
+        self.profileNameLabel.text = profile.name
+        self.profileLinkLabel.text = profile.loginName
+        self.profileDescriptionLabel.text = profile.bio
+    }
 }
