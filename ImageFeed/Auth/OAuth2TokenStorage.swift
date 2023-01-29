@@ -7,11 +7,15 @@ class OAuth2TokenStorage {
     var token: String? {
         get {
             KeychainWrapper.standard.string(forKey: Keys.token.rawValue)
+//            userDefaults.string(forKey: Keys.token.rawValue)
         }
         
         set {
             guard let token = newValue else { return }
             KeychainWrapper.standard.set(token, forKey: Keys.token.rawValue)
+            
+//            guard let data = newValue else { return }
+//            userDefaults.set(data, forKey: Keys.token.rawValue)
         }
     }
     

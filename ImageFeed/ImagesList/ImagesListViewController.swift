@@ -3,6 +3,7 @@ import UIKit
 final class ImagesListViewController: UIViewController {
     private var photosNames = [String]()
     private let showSingleImageSegueIdentifier = "ShowSingleImage"
+    private let imagesListService = ImagesListService.shared
     
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -20,7 +21,7 @@ final class ImagesListViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == showSingleImageSegueIdentifier {
-            let viewController = segue.destination as? SingleImageViewController 
+            let viewController = segue.destination as? SingleImageViewController
             let indexPath = sender as! IndexPath
             let image = UIImage(named: photosNames[indexPath.row])
             viewController?.image = image
@@ -83,7 +84,7 @@ extension ImagesListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if indexPath.row == ImagesListService().photos.count {
-            ImagesListService().fetchPhotosNextPage()
+            imagesListService.fetchPhotosNextPage()
         }
     }
 }
