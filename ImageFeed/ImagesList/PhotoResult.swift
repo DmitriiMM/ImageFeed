@@ -22,12 +22,12 @@ struct PhotoResult: Decodable {
     let isLiked: Bool
     
     enum CodingKeys: String, CodingKey {
-        case id
-        case width
-        case height
+        case id = "id"
+        case width = "width"
+        case height = "height"
         case createdAt = "created_at"
-        case description
-        case urls
+        case description = "description"
+        case urls = "urls"
         case isLiked = "liked_by_user"
     }
 }
