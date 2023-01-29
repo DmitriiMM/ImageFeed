@@ -8,7 +8,7 @@ struct PhotoResult: Decodable {
         width = try container.decode(Int.self, forKey: .width)
         height = try container.decode(Int.self, forKey: .height)
         createdAt = try container.decode(String.self, forKey: .createdAt)
-        description = try container.decode(String.self, forKey: .description)
+        welcomeDescription = try container.decode(String?.self, forKey: .welcomeDescription)
         urls = try container.decode(Urls.self, forKey: .urls)
         isLiked = try container.decode(Bool.self, forKey: .isLiked)
     }
@@ -17,7 +17,7 @@ struct PhotoResult: Decodable {
     let width: Int
     let height: Int
     let createdAt: String
-    let description: String
+    let welcomeDescription: String?
     let urls: Urls
     let isLiked: Bool
     
@@ -26,7 +26,7 @@ struct PhotoResult: Decodable {
         case width = "width"
         case height = "height"
         case createdAt = "created_at"
-        case description = "description"
+        case welcomeDescription = "description"
         case urls = "urls"
         case isLiked = "liked_by_user"
     }
