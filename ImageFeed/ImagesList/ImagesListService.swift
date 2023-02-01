@@ -21,23 +21,31 @@ final class ImagesListService {
         
         let token = OAuth2TokenStorage().token!
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        
+        print("🚜🚜🚜 \(String(describing: request.allHTTPHeaderFields))")
         let session = URLSession.shared
         let task = session.objectTask(for: request) { [weak self] (result: Result<[PhotoResult], Error>) in
             DispatchQueue.main.async {
+                print("🚛🚛🚛srart write task")
                 guard self != nil else { return }
+                print("🚗🚗🚗self == nil")
                 switch result {
                 case .success(let photoResult):
+                    print("🥐🥐🥐\(photoResult)")
+                    var photoss: [Photo] = []
+                    print("🥐🥐🥐\(photoss)")
                     for photo in photoResult {
                         let onePhoto = Photo(photoResult: photo)
-                        ImagesListService.shared.photos.append(onePhoto)
+                        photoss.append(onePhoto)
                     }
+                    self!.photos = photoss
+                    print("🫒🫒🫒array ImagesListService.shared.photos finished \(ImagesListService.shared.photos)")
                     
                     NotificationCenter.default
                         .post(
                             name: ImagesListService.didChangeNotification,
                             object: self,
-                            userInfo: ["photos": ImagesListService.shared.photos])
+                            userInfo: ["photos": self!.photos])
+                    print("🧀🧀🧀\(NotificationCenter.default)")
                 case .failure(let error):
                     print(error)
                 }
@@ -45,24 +53,24 @@ final class ImagesListService {
         }
         task.resume()
     }
+}
+
+struct Photo {
+    let id: String
+    let size: CGSize
+    let createdAt: Date?
+    let welcomeDescription: String?
+    let thumbImageURL: String
+    let largeImageURL: String
+    let isLiked: Bool
     
-    struct Photo {
-        let id: String
-        let size: CGSize
-        let createdAt: Date?
-        let welcomeDescription: String?
-        let thumbImageURL: String
-        let largeImageURL: String
-        let isLiked: Bool
-        
-        init(photoResult: PhotoResult) {
-            id = photoResult.id
-            size = CGSize(width: photoResult.width, height: photoResult.height)
-            createdAt = DateFormatter().date(from: photoResult.createdAt)
-            welcomeDescription = photoResult.welcomeDescription
-            thumbImageURL = photoResult.urls.thumbImageURL
-            largeImageURL = photoResult.urls.largeImageURL
-            isLiked = photoResult.isLiked
-        }
+    init(photoResult: PhotoResult) {
+        id = photoResult.id
+        size = CGSize(width: photoResult.width, height: photoResult.height)
+        createdAt = DateFormatter().date(from: photoResult.createdAt)
+        welcomeDescription = photoResult.welcomeDescription
+        thumbImageURL = photoResult.urls.thumbImageURL
+        largeImageURL = photoResult.urls.largeImageURL
+        isLiked = photoResult.isLiked
     }
 }
