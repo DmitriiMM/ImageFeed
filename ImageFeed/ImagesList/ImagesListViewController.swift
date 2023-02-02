@@ -10,6 +10,9 @@ final class ImagesListViewController: UIViewController {
     
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_GB")
+        formatter.setLocalizedDateFormatFromTemplate("MMMMd")
+        
         formatter.dateStyle = .long
         formatter.timeStyle = .none
         return formatter
@@ -23,7 +26,6 @@ final class ImagesListViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         imagesListService.fetchPhotosNextPage()
-       
         
         imagesListServiceObserver = NotificationCenter.default
             .addObserver(
@@ -32,7 +34,7 @@ final class ImagesListViewController: UIViewController {
                 queue: .main
             ) { [weak self] _ in
                 guard let self = self else { return }
-               
+                print("⏰⏰⏰  imagesListServiceObserver ON")
                 self.updateTableViewAnimated()
             }
         
@@ -41,13 +43,15 @@ final class ImagesListViewController: UIViewController {
     func updateTableViewAnimated() {
         let oldCount = photos.count
         let newCount = imagesListService.photos.count
-        print("🥩🥩🥩\(imagesListService.photos)")
+        print("🥩1🥩1🥩\(oldCount) ==== \(newCount)")
+        
         photos = imagesListService.photos
-        print("🥩🥩🥩\(photos)")
+        print("🥩2🥩2🥩\(oldCount) ==== \(newCount)")
         if oldCount != newCount {
             tableView.performBatchUpdates {
-                let indexPaths = (oldCount..<newCount).map { i in
-                    IndexPath(row: i, section: 0)
+                var indexPaths: [IndexPath] = []
+                for i in oldCount..<newCount {
+                    indexPaths.append(IndexPath(row: i, section: 0))
                 }
                 tableView.insertRows(at: indexPaths, with: .automatic)
             } completion: { _ in }
@@ -80,10 +84,8 @@ final class ImagesListViewController: UIViewController {
     
     
     func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
-        
+        print("☎️ configCell() for cell \(indexPath.description)")
        
-        
-        DispatchQueue.main.async {
             let imageURL = self.photos[indexPath.row].thumbImageURL
             let url = URL(string: imageURL)
             let placeholder = UIImage(named: "stub")
@@ -100,21 +102,19 @@ final class ImagesListViewController: UIViewController {
                     // - .none - Just downloaded.
                     // - .memory - Got from memory cache.
                     // - .disk - Got from disk cache.
-                    print(value.cacheType)
+                    print("💿💿💿 cacheType \(value.cacheType)")
                     
                     // The source object which contains information like `url`.
-                    print(value.source)
+                    print("💿💿💿 source \(value.source)")
                     
                 case .failure(let error):
                     print(error) // The error happens
                     cell.imageCell.kf.indicatorType = .none
                 }
             }
-        }
         
-        if let date = photos[indexPath.row].createdAt {
-            cell.dateLabelCell.text = dateFormatter.string(from: date)
-        }
+        cell.dateLabelCell.text = photos[indexPath.row].createdAt
+        
         
         if photos[indexPath.row].isLiked {
             cell.likeButtonCell.imageView?.image = UIImage(named: "Active")
@@ -132,7 +132,7 @@ extension ImagesListViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        print("🥗🥗🥗🥗проверка   if 🥗\(indexPath.row)🥗 == 🥗\(photos.count)🥗 ")
+        print("🥗🥗🥗🥗проверка   if 🥗\(indexPath.row + 1)🥗 == 🥗\(photos.count)🥗 ")
         if indexPath.row + 1 == photos.count {
             print("🥗🥗🥗проверка   if indexPath.row == photos.count УСПЕХ")
             imagesListService.fetchPhotosNextPage()
@@ -142,7 +142,6 @@ extension ImagesListViewController: UITableViewDelegate {
 
 extension ImagesListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("☎️\(photos)")
         return photos.count
     }
     

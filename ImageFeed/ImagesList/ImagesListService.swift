@@ -24,9 +24,9 @@ final class ImagesListService {
         print("🚜🚜🚜 \(String(describing: request.allHTTPHeaderFields))")
         let session = URLSession.shared
         let task = session.objectTask(for: request) { [weak self] (result: Result<[PhotoResult], Error>) in
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
                 print("🚛🚛🚛srart write task")
-                guard self != nil else { return }
+                guard let self else { return }
                 print("🚗🚗🚗self == nil")
                 switch result {
                 case .success(let photoResult):
@@ -37,14 +37,14 @@ final class ImagesListService {
                         let onePhoto = Photo(photoResult: photo)
                         photoss.append(onePhoto)
                     }
-                    self!.photos = photoss
+                    self.photos = photoss
                     print("🫒🫒🫒array ImagesListService.shared.photos finished \(ImagesListService.shared.photos)")
                     
                     NotificationCenter.default
                         .post(
                             name: ImagesListService.didChangeNotification,
                             object: self,
-                            userInfo: ["photos": self!.photos])
+                            userInfo: ["photos": self.photos])
                     print("🧀🧀🧀\(NotificationCenter.default)")
                 case .failure(let error):
                     print(error)
@@ -58,7 +58,7 @@ final class ImagesListService {
 struct Photo {
     let id: String
     let size: CGSize
-    let createdAt: Date?
+    let createdAt: String
     let welcomeDescription: String?
     let thumbImageURL: String
     let largeImageURL: String
@@ -67,7 +67,7 @@ struct Photo {
     init(photoResult: PhotoResult) {
         id = photoResult.id
         size = CGSize(width: photoResult.width, height: photoResult.height)
-        createdAt = DateFormatter().date(from: photoResult.createdAt)
+        createdAt = photoResult.createdAt
         welcomeDescription = photoResult.welcomeDescription
         thumbImageURL = photoResult.urls.thumbImageURL
         largeImageURL = photoResult.urls.largeImageURL
