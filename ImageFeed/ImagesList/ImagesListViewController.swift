@@ -34,19 +34,14 @@ final class ImagesListViewController: UIViewController {
                 queue: .main
             ) { [weak self] _ in
                 guard let self = self else { return }
-                print("⏰⏰⏰  imagesListServiceObserver ON")
                 self.updateTableViewAnimated()
             }
-        
     }
     
     func updateTableViewAnimated() {
         let oldCount = photos.count
         let newCount = imagesListService.photos.count
-        print("🥩1🥩1🥩\(oldCount) ==== \(newCount)")
-        
         photos = imagesListService.photos
-        print("🥩2🥩2🥩\(oldCount) ==== \(newCount)")
         if oldCount != newCount {
             tableView.performBatchUpdates {
                 var indexPaths: [IndexPath] = []
@@ -60,10 +55,30 @@ final class ImagesListViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == showSingleImageSegueIdentifier {
-//            let viewController = segue.destination as? SingleImageViewController
-//            let indexPath = sender as! IndexPath
-//            let image = UIImage(named: photosNames[indexPath.row])
-//            viewController?.image = image
+            let viewController = segue.destination as? SingleImageViewController
+            let indexPath = sender as! IndexPath
+            let tappedCell = tableView.cellForRow(at: indexPath) as! ImagesListCell
+            let image = tappedCell.imageCell.image
+            viewController?.image = image
+            
+//            let imageView = UIImageView()
+//            let imageURL = self.photos[indexPath.row].largeImageURL
+//            let url = URL(string: imageURL)
+//            DispatchQueue.main.async {
+//                imageView.kf.indicatorType = .activity
+//                imageView.kf.setImage(with: url) { result in
+//                    switch result {
+//                    case .success(_):
+//                        viewController?.image = imageView.image
+//                        imageView.kf.indicatorType = .none
+//                    case .failure(let error):
+//                        print(error)
+//                        imageView.kf.indicatorType = .none
+//                    }
+//                }
+//            }
+//            imageView.contentMode = .scaleAspectFit
+            
         } else {
             prepare(for: segue, sender: sender)
         }
@@ -76,45 +91,29 @@ final class ImagesListViewController: UIViewController {
         ]
         
         cell.gradientLayer.locations = [0, 1]
-       
         cell.gradientLayer.frame = cell.gradientViewCell.bounds
-        
         cell.gradientViewCell.layer.insertSublayer(cell.gradientLayer, at: 0)
     }
     
     
     func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
-        print("☎️ configCell() for cell \(indexPath.description)")
-       
-            let imageURL = self.photos[indexPath.row].thumbImageURL
-            let url = URL(string: imageURL)
-            let placeholder = UIImage(named: "stub")
-            
-            cell.imageCell.kf.indicatorType = .activity
-            cell.imageCell.kf.setImage(with: url, placeholder: placeholder) { result in
-                switch result {
-                case .success(let value):
-                    self.tableView.reloadRows(at: [indexPath], with: .automatic)
-                    cell.imageCell.kf.indicatorType = .none
-                    print(value.image)
-                    
-                    // From where the image was retrieved:
-                    // - .none - Just downloaded.
-                    // - .memory - Got from memory cache.
-                    // - .disk - Got from disk cache.
-                    print("💿💿💿 cacheType \(value.cacheType)")
-                    
-                    // The source object which contains information like `url`.
-                    print("💿💿💿 source \(value.source)")
-                    
-                case .failure(let error):
-                    print(error) // The error happens
-                    cell.imageCell.kf.indicatorType = .none
-                }
+        let imageURL = self.photos[indexPath.row].thumbImageURL
+        let url = URL(string: imageURL)
+        let placeholder = UIImage(named: "stub")
+        
+        cell.imageCell.kf.indicatorType = .activity
+        cell.imageCell.kf.setImage(with: url, placeholder: placeholder) { result in
+            switch result {
+            case .success(_):
+                self.tableView.reloadRows(at: [indexPath], with: .automatic)
+                cell.imageCell.kf.indicatorType = .none
+            case .failure(let error):
+                print(error)
+                cell.imageCell.kf.indicatorType = .none
             }
+        }
         
         cell.dateLabelCell.text = photos[indexPath.row].createdAt
-        
         
         if photos[indexPath.row].isLiked {
             cell.likeButtonCell.imageView?.image = UIImage(named: "Active")
@@ -132,9 +131,7 @@ extension ImagesListViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        print("🥗🥗🥗🥗проверка   if 🥗\(indexPath.row + 1)🥗 == 🥗\(photos.count)🥗 ")
         if indexPath.row + 1 == photos.count {
-            print("🥗🥗🥗проверка   if indexPath.row == photos.count УСПЕХ")
             imagesListService.fetchPhotosNextPage()
         }
     }
@@ -153,9 +150,6 @@ extension ImagesListViewController: UITableViewDataSource {
         }
         
         configCell(for: imageListCell, with: indexPath)
-        
         return imageListCell
     }
-    
-   
 }

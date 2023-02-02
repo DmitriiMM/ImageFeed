@@ -16,36 +16,32 @@ final class ImagesListService {
         task?.cancel()
         
         let nextPage = lastLoadedPage == nil ? 1 : lastLoadedPage! + 1
+        lastLoadedPage = lastLoadedPage == nil ? 1 : nextPage
+        
         var request = URLRequest(url: URL(string: "/photos?page=\(nextPage)&&per_page=10", relativeTo: defaultBaseURL)!)
         request.httpMethod = "GET"
         
         let token = OAuth2TokenStorage().token!
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        print("🚜🚜🚜 \(String(describing: request.allHTTPHeaderFields))")
+        
         let session = URLSession.shared
         let task = session.objectTask(for: request) { [weak self] (result: Result<[PhotoResult], Error>) in
             DispatchQueue.main.async { [weak self] in
-                print("🚛🚛🚛srart write task")
                 guard let self else { return }
-                print("🚗🚗🚗self == nil")
                 switch result {
                 case .success(let photoResult):
-                    print("🥐🥐🥐\(photoResult)")
-                    var photoss: [Photo] = []
-                    print("🥐🥐🥐\(photoss)")
+                    var photosArray: [Photo] = []
                     for photo in photoResult {
                         let onePhoto = Photo(photoResult: photo)
-                        photoss.append(onePhoto)
+                        photosArray.append(onePhoto)
                     }
-                    self.photos = photoss
-                    print("🫒🫒🫒array ImagesListService.shared.photos finished \(ImagesListService.shared.photos)")
+                    self.photos.append(contentsOf: photosArray)
                     
                     NotificationCenter.default
                         .post(
                             name: ImagesListService.didChangeNotification,
                             object: self,
                             userInfo: ["photos": self.photos])
-                    print("🧀🧀🧀\(NotificationCenter.default)")
                 case .failure(let error):
                     print(error)
                 }
