@@ -49,6 +49,60 @@ final class ImagesListService {
         }
         task.resume()
     }
+    
+    func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
+        var request = URLRequest(url: URL(string: "/photos/\(photoId)/like", relativeTo: defaultBaseURL)!)
+        let token = OAuth2TokenStorage().token!
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
+        print("❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥 isLike - \(isLike)")
+        if isLike {
+            request.httpMethod = "DELETE"
+        } else {
+            request.httpMethod = "POST"
+        }
+        
+        print("🧲🧲🧲 request.allHTTPHeaderFields - \(request.allHTTPHeaderFields)")
+        print("🧲🧲🧲 request.url - \(request.url)")
+        print("🧲🧲🧲 request.httpBody - \(request.httpBody)")
+        print("🧲🧲🧲 request.httpMethod - \(request.httpMethod)")
+        
+        let session = URLSession.shared
+        let task = session.objectTask(for: request) { [weak self] (result: Result<LikedPhotoResult, Error>) in
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                switch result {
+                case .success(let photoResult):
+                    print("❤️❤️❤️ photoResult - \(photoResult)")
+                    
+                    let newPhoto = LikedPhoto(likedPhotoResult: photoResult)
+                    print("🧡🧡🧡 newPhoto - \(newPhoto)")
+//                    newPhoto.likedPhoto.isLiked.toggle()
+//                    let encodePhotoResult = try JSONEncoder().encode(newPhoto)
+                    
+                  
+                    if let index = self.photos.firstIndex(where: { $0.id == photoId }) {
+                        var photo = self.photos[index]
+                        print("💛💛💛 photo for index \(index) - \(photo)")
+                       
+//                        let replacingPhoto = Photo(photoResult: encodePhotoResult)
+                        photo.isLiked = newPhoto.likedPhoto.isLiked
+                        
+                        self.photos.remove(at: index)
+                        self.photos.insert(photo, at: index)
+                        
+                        print("💚💚💚 photo.isLiked - \(photo.isLiked)")
+                        print("💚💚💚 photos - \(self.photos)")
+                        completion(.success(()))
+                    }
+                case .failure(let error):
+                    completion(.failure(error))
+                    print("🧨🧨🧨 \(error)")
+                }
+            }
+        }
+        task.resume()
+    }
 }
 
 struct Photo {
@@ -58,7 +112,7 @@ struct Photo {
     let welcomeDescription: String?
     let thumbImageURL: String
     let largeImageURL: String
-    let isLiked: Bool
+    var isLiked: Bool
     
     init(photoResult: PhotoResult) {
         id = photoResult.id
@@ -68,5 +122,12 @@ struct Photo {
         thumbImageURL = photoResult.urls.thumbImageURL
         largeImageURL = photoResult.urls.largeImageURL
         isLiked = photoResult.isLiked
+    }
+}
+
+struct LikedPhoto {
+    var likedPhoto: PhotoResult
+    init(likedPhotoResult: LikedPhotoResult) {
+        likedPhoto = likedPhotoResult.likedPhoto
     }
 }

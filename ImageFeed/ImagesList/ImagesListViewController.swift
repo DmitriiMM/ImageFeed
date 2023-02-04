@@ -57,27 +57,10 @@ final class ImagesListViewController: UIViewController {
         if segue.identifier == showSingleImageSegueIdentifier {
             let viewController = segue.destination as? SingleImageViewController
             let indexPath = sender as! IndexPath
-            let tappedCell = tableView.cellForRow(at: indexPath) as! ImagesListCell
-            let image = tappedCell.imageCell.image
-            viewController?.image = image
-            
-//            let imageView = UIImageView()
-//            let imageURL = self.photos[indexPath.row].largeImageURL
-//            let url = URL(string: imageURL)
-//            DispatchQueue.main.async {
-//                imageView.kf.indicatorType = .activity
-//                imageView.kf.setImage(with: url) { result in
-//                    switch result {
-//                    case .success(_):
-//                        viewController?.image = imageView.image
-//                        imageView.kf.indicatorType = .none
-//                    case .failure(let error):
-//                        print(error)
-//                        imageView.kf.indicatorType = .none
-//                    }
-//                }
-//            }
-//            imageView.contentMode = .scaleAspectFit
+//            let tappedCell = tableView.cellForRow(at: indexPath) as! ImagesListCell
+//            let image = tappedCell.imageCell.image
+//            viewController?.image = image
+            viewController?.fullImageUrl = self.photos[indexPath.row].largeImageURL
             
         } else {
             prepare(for: segue, sender: sender)
@@ -95,6 +78,10 @@ final class ImagesListViewController: UIViewController {
         cell.gradientViewCell.layer.insertSublayer(cell.gradientLayer, at: 0)
     }
     
+    func  setIsLiked(isLike: Bool) -> String {
+        let imageNameLike = isLike == true ? "NoActive" : "Active"
+        return imageNameLike
+    }
     
     func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
         let imageURL = self.photos[indexPath.row].thumbImageURL
@@ -113,13 +100,15 @@ final class ImagesListViewController: UIViewController {
             }
         }
         
-        cell.dateLabelCell.text = photos[indexPath.row].createdAt
-        
-        if photos[indexPath.row].isLiked {
-            cell.likeButtonCell.imageView?.image = UIImage(named: "Active")
-        } else {
-            cell.likeButtonCell.imageView?.image = UIImage(named: "NoActive")
+        let like = self.photos[indexPath.row].isLiked
+        switch like {
+        case true:
+            cell.likeButtonCell.setImage(UIImage(named: "Active"), for: .normal)
+        case false:
+            cell.likeButtonCell.setImage(UIImage(named: "NoActive"), for: .normal)
         }
+        
+        cell.dateLabelCell.text = photos[indexPath.row].createdAt
         
         configGradient(for: cell)
     }
@@ -149,7 +138,36 @@ extension ImagesListViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
+        imageListCell.delegate = self
         configCell(for: imageListCell, with: indexPath)
         return imageListCell
+    }
+}
+
+extension ImagesListViewController: ImagesListCellDelegate {
+    func imageListCellDidTapLike(_ cell: ImagesListCell) {
+        photos = imagesListService.photos
+        guard let indexPath = tableView.indexPath(for: cell) else { return }
+        let photo = photos[indexPath.row]
+        print("🤍🤍🤍 photo for index \(indexPath) - \(photo)")
+        print("🤎🤎🤎 photo for index \(indexPath.row) - \(photo)")
+        UIBlockingProgressHUD.show()
+        imagesListService.changeLike(photoId: photo.id, isLike: photo.isLiked) { result in
+            print("❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥 photo - \(photo)")
+            switch result {
+            case .success():
+                let imageNameLike = self.setIsLiked(isLike: photo.isLiked)
+                print("💙💙💙 imageNameLike - \(imageNameLike)")
+                guard let image = UIImage(named: imageNameLike) else { return }
+                print("💜💜💜 \(image) is OK")
+                cell.likeButtonCell.setImage(image, for: .normal)
+                print("🖤🖤🖤 cell.likeButtonCell.imageView?.image = image")
+                UIBlockingProgressHUD.dismiss()
+            case .failure(_):
+                UIBlockingProgressHUD.dismiss()
+                print("🖤🖤🖤error🖤🖤🖤")
+                break
+            }
+        }
     }
 }

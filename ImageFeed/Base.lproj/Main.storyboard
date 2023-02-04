@@ -37,7 +37,7 @@
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                 </imageView>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jVO-ad-vlX">
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jVO-ad-vlX">
                                                     <rect key="frame" x="362.5" y="23" width="21" height="18"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="18" id="60f-Ge-ARe"/>
@@ -47,6 +47,9 @@
                                                     <buttonConfiguration key="configuration" style="plain" image="NoActive" title="">
                                                         <color key="baseForegroundColor" red="1" green="0.036709969359999997" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                     </buttonConfiguration>
+                                                    <connections>
+                                                        <action selector="didLikeButton:" destination="7Ij-Ym-Rey" eventType="touchUpInside" id="YlA-D4-Vof"/>
+                                                    </connections>
                                                 </button>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d6y-zl-0Qh">
                                                     <rect key="frame" x="16" y="111" width="382" height="30"/>
@@ -132,11 +135,13 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bf1-u8-ZCH">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="3iv-dB-0DR">
-                                        <rect key="frame" x="0.0" y="0.0" width="200" height="132"/>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="3iv-dB-0DR">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                     </imageView>
                                 </subviews>
                                 <constraints>
+                                    <constraint firstItem="6Gt-v1-n7u" firstAttribute="trailing" secondItem="3iv-dB-0DR" secondAttribute="trailing" id="15j-qd-NHQ"/>
+                                    <constraint firstItem="6Gt-v1-n7u" firstAttribute="bottom" secondItem="3iv-dB-0DR" secondAttribute="bottom" id="dit-HM-7r2"/>
                                     <constraint firstAttribute="bottom" secondItem="3iv-dB-0DR" secondAttribute="bottom" id="mVJ-86-fYe"/>
                                     <constraint firstItem="3iv-dB-0DR" firstAttribute="top" secondItem="6Gt-v1-n7u" secondAttribute="top" id="mbs-Sr-Sjb"/>
                                     <constraint firstItem="3iv-dB-0DR" firstAttribute="leading" secondItem="bf1-u8-ZCH" secondAttribute="leading" id="pII-qY-eRZ"/>

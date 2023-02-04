@@ -1,5 +1,6 @@
 import UIKit
 import Kingfisher
+import WebKit
 
 final class ProfileViewController: UIViewController {
     
@@ -119,7 +120,17 @@ final class ProfileViewController: UIViewController {
         view.addSubview(logoutButton)
     }
     
-    @objc private func logOutButtonTapped(_ sender: Any) { }
+    @objc private func logOutButtonTapped(_ sender: Any) {
+        OAuth2TokenStorage().token = nil
+        WebViewViewController.clean()
+        let storyboard = UIStoryboard(name: "Main", bundle: .main)
+        guard
+            let authViewController = storyboard.instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController else { return }
+        authViewController.modalPresentationStyle = .fullScreen
+        self.present(authViewController, animated: true)
+    }
+    
+
     
     func updateProfileDetails(profile: Profile) {
         self.profileNameLabel.text = profile.name

@@ -1,6 +1,7 @@
 import UIKit
 
 final class SingleImageViewController: UIViewController {
+    var fullImageUrl: String?
     var image: UIImage! {
         didSet {
             guard isViewLoaded else { return }
@@ -14,12 +15,12 @@ final class SingleImageViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        imageView.image = image
         scrollView.minimumZoomScale = 0.1
         scrollView.maximumZoomScale = 1.25
         
-        rescaleAndCenterImageInScrollView(image: image)
+        setImage()
     }
+    
     
     @IBAction private func didTapBackButton(_ sender: Any) {
         dismiss(animated: true, completion: nil)
@@ -29,6 +30,32 @@ final class SingleImageViewController: UIViewController {
         let ac = UIActivityViewController(activityItems: [image], applicationActivities: nil)
         
         present(ac, animated: true, completion: nil)
+    }
+    
+    private func setImage() {
+        UIBlockingProgressHUD.show()
+        let url = URL(string: fullImageUrl!)
+        DispatchQueue.main.async {
+            self.imageView.kf.setImage(with: url) { [weak self] result in
+                UIBlockingProgressHUD.dismiss()
+                guard let self = self else { return }
+                switch result {
+                case .success(let imageResult):
+                    self.rescaleAndCenterImageInScrollView(image: imageResult.image)
+                case .failure(let error):
+                    self.showError(with: error)
+                }
+            }
+        }
+    }
+    
+    private func showError(with error: Error) {
+        let alert = UIAlertController(title: "Что-то пошло не так.", message: "Ошибка - \(error). Попробовать ещё раз?", preferredStyle: .alert)
+        let action = UIAlertAction(title: "Не надо", style: .cancel)
+        var completion: (UIAlertAction) -> Void = { [weak self] _ in self?.setImage() }
+        let actionTwo = UIAlertAction(title: "Повторить", style: .default, handler: completion)
+        alert.addAction(action)
+        self.present(alert, animated: true)
     }
 }
 

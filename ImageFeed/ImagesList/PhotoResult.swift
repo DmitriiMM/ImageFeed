@@ -1,5 +1,18 @@
 import Foundation
 
+struct LikedPhotoResult: Decodable {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        likedPhoto = try container.decode(PhotoResult.self, forKey: .likedPhoto)
+    }
+    
+    let likedPhoto: PhotoResult
+    
+    enum CodingKeys: String, CodingKey {
+        case likedPhoto = "photo"
+    }
+}
 struct PhotoResult: Decodable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -19,7 +32,7 @@ struct PhotoResult: Decodable {
     let createdAt: String
     let welcomeDescription: String?
     let urls: Urls
-    let isLiked: Bool
+    var isLiked: Bool
     
     enum CodingKeys: String, CodingKey {
         case id = "id"
