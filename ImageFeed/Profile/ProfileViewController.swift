@@ -6,6 +6,12 @@ final class ProfileViewController: UIViewController {
     
     private let profileService = ProfileService.shared
     private let tokenStorage = OAuth2TokenStorage()
+    var animationLayers = Set<CALayer>()
+    let gradient = CAGradientLayer()
+    let gradientForNameLabel = CAGradientLayer()
+    let gradientForLinkLabel = CAGradientLayer()
+    let gradientForDescriptionLabel = CAGradientLayer()
+    let gradientChangeAnimation = CABasicAnimation(keyPath: "locations")
     
     private lazy var profileImageView: UIImageView = {
         let image = UIImage(systemName: "person.crop.circle.fill")
@@ -50,7 +56,86 @@ final class ProfileViewController: UIViewController {
     }()
     
     private var profileImageServiceObserver: NSObjectProtocol?
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        //MARK: - Gradient for Image View
        
+        gradient.frame = CGRect(origin: .zero, size: CGSize(width: 70, height: 70))
+        gradient.locations = [0, 0.1, 0.3]
+        gradient.colors = [
+            UIColor(red: 0.682, green: 0.686, blue: 0.706, alpha: 1).cgColor,
+            UIColor(red: 0.531, green: 0.533, blue: 0.553, alpha: 1).cgColor,
+            UIColor(red: 0.431, green: 0.433, blue: 0.453, alpha: 1).cgColor
+        ]
+        gradient.startPoint = CGPoint(x: 0, y: 0.5)
+        gradient.endPoint = CGPoint(x: 1, y: 0.5)
+        gradient.cornerRadius = 35
+        gradient.masksToBounds = true
+        animationLayers.insert(gradient)
+        profileImageView.layer.addSublayer(gradient)
+        
+        //MARK: - Gradient for NAME Label
+        
+        gradientForNameLabel.frame = CGRect(origin: CGPoint(x: -13, y: 0), size: CGSize(width: 300, height: 26))
+        gradientForNameLabel.locations = [0, 0.1, 0.3]
+        gradientForNameLabel.colors = [
+            UIColor(red: 0.682, green: 0.686, blue: 0.706, alpha: 1).cgColor,
+            UIColor(red: 0.531, green: 0.533, blue: 0.553, alpha: 1).cgColor,
+            UIColor(red: 0.431, green: 0.433, blue: 0.453, alpha: 1).cgColor
+        ]
+        gradientForNameLabel.startPoint = CGPoint(x: 0, y: 0.5)
+        gradientForNameLabel.endPoint = CGPoint(x: 1, y: 0.5)
+        gradientForNameLabel.cornerRadius = 13
+        gradientForNameLabel.masksToBounds = true
+        animationLayers.insert(gradientForNameLabel)
+        profileNameLabel.layer.insertSublayer(gradientForNameLabel, at: 0)
+        
+        //MARK: - Gradient for LINK Label
+       
+        gradientForLinkLabel.frame = CGRect(origin: CGPoint(x: -13, y: 0), size: CGSize(width: 150, height: 18))
+        gradientForLinkLabel.locations = [0, 0.1, 0.3]
+        gradientForLinkLabel.colors = [
+            UIColor(red: 0.682, green: 0.686, blue: 0.706, alpha: 1).cgColor,
+            UIColor(red: 0.531, green: 0.533, blue: 0.553, alpha: 1).cgColor,
+            UIColor(red: 0.431, green: 0.433, blue: 0.453, alpha: 1).cgColor
+        ]
+        gradientForLinkLabel.startPoint = CGPoint(x: 0, y: 0.5)
+        gradientForLinkLabel.endPoint = CGPoint(x: 1, y: 0.5)
+        gradientForLinkLabel.cornerRadius = 9
+        gradientForLinkLabel.masksToBounds = true
+        animationLayers.insert(gradientForLinkLabel)
+        profileLinkLabel.layer.insertSublayer(gradientForLinkLabel, at: 0)
+        
+        //MARK: - Gradient for DESCRIPTOIN Label
+        
+        gradientForDescriptionLabel.frame = CGRect(origin: CGPoint(x: -13, y: 0), size: CGSize(width: 120, height: 18))
+        gradientForDescriptionLabel.locations = [0, 0.1, 0.3]
+        gradientForDescriptionLabel.colors = [
+            UIColor(red: 0.682, green: 0.686, blue: 0.706, alpha: 1).cgColor,
+            UIColor(red: 0.531, green: 0.533, blue: 0.553, alpha: 1).cgColor,
+            UIColor(red: 0.431, green: 0.433, blue: 0.453, alpha: 1).cgColor
+        ]
+        gradientForDescriptionLabel.startPoint = CGPoint(x: 0, y: 0.5)
+        gradientForDescriptionLabel.endPoint = CGPoint(x: 1, y: 0.5)
+        gradientForDescriptionLabel.cornerRadius = 9
+        gradientForDescriptionLabel.masksToBounds = true
+        animationLayers.insert(gradientForDescriptionLabel)
+        profileDescriptionLabel.layer.insertSublayer(gradientForDescriptionLabel, at: 0)
+        
+        //MARK: - Animation for all gradients
+       
+        gradientChangeAnimation.duration = 1.0
+        gradientChangeAnimation.repeatCount = .infinity
+        gradientChangeAnimation.fromValue = [0, 0.1, 0.3]
+        gradientChangeAnimation.toValue = [0, 0.8, 1]
+        gradient.add(gradientChangeAnimation, forKey: "locationsChange")
+        gradientForNameLabel.add(gradientChangeAnimation, forKey: "locationsChange")
+        gradientForLinkLabel.add(gradientChangeAnimation, forKey: "locationsChange")
+        gradientForDescriptionLabel.add(gradientChangeAnimation, forKey: "locationsChange")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "YP Black")
@@ -68,6 +153,7 @@ final class ProfileViewController: UIViewController {
                 queue: .main
             ) { [weak self] _ in
                 guard let self = self else { return }
+                
                 self.updateAvatar()
             }
         updateAvatar()
@@ -78,10 +164,17 @@ final class ProfileViewController: UIViewController {
             let avatarURL = ProfileImageService.shared.avatarURL,
             let url = URL(string: avatarURL)
         else { return }
+        
         profileImageView.kf.setImage(with: url, options: [
             .processor(RoundCornerImageProcessor(cornerRadius: 16, backgroundColor: .clear)),
             .cacheSerializer(FormatIndicatedCacheSerializer.png)
         ])
+        self.animationLayers.removeAll()
+        self.gradient.removeFromSuperlayer()
+        self.gradientForNameLabel.removeFromSuperlayer()
+        self.gradientForLinkLabel.removeFromSuperlayer()
+        self.gradientForDescriptionLabel.removeFromSuperlayer()
+       
         profileImageView.clipsToBounds = true
     }
     

@@ -8,14 +8,19 @@ final class ImagesListViewController: UIViewController {
     
     private var imagesListServiceObserver: NSObjectProtocol?
     
-    private lazy var dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "en_GB")
-        formatter.setLocalizedDateFormatFromTemplate("MMMMd")
+    private lazy var inputDateFormatter: DateFormatter = {
+        let inputDateFormatter = DateFormatter()
+        inputDateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
         
-        formatter.dateStyle = .long
-        formatter.timeStyle = .none
-        return formatter
+        return inputDateFormatter
+    }()
+
+    private lazy var outputDateFormatter: DateFormatter = {
+        let outputDateFormatter = DateFormatter()
+        outputDateFormatter.dateFormat = "dd MMMM yyyy"
+        outputDateFormatter.locale = Locale(identifier: "ru_RU")
+        
+        return outputDateFormatter
     }()
     
     @IBOutlet private var tableView: UITableView!
@@ -33,8 +38,11 @@ final class ImagesListViewController: UIViewController {
                 object: nil,
                 queue: .main
             ) { [weak self] _ in
-                guard let self = self else { return }
-                self.updateTableViewAnimated()
+//                guard let self = self else { return }
+                
+                ImagesListCell().gradientForCell.removeFromSuperlayer()
+                ImagesListCell().animationLayers.removeAll()
+                self?.updateTableViewAnimated()
             }
     }
     
@@ -89,10 +97,12 @@ final class ImagesListViewController: UIViewController {
         let placeholder = UIImage(named: "stub")
         
         cell.imageCell.kf.indicatorType = .activity
-        cell.imageCell.kf.setImage(with: url, placeholder: placeholder) { result in
+        cell.imageCell.kf.setImage(with: url, placeholder: placeholder) { [weak self] result in
+            guard let self else { return }
             switch result {
             case .success(_):
                 self.tableView.reloadRows(at: [indexPath], with: .automatic)
+                cell.gradient()
                 cell.imageCell.kf.indicatorType = .none
             case .failure(let error):
                 print(error)
@@ -108,7 +118,10 @@ final class ImagesListViewController: UIViewController {
             cell.likeButtonCell.setImage(UIImage(named: "NoActive"), for: .normal)
         }
         
-        cell.dateLabelCell.text = photos[indexPath.row].createdAt
+        
+        guard let inputDate = inputDateFormatter.date(from: photos[indexPath.row].createdAt) else { return }
+        let outputDateString = outputDateFormatter.string(from: inputDate)
+        cell.dateLabelCell.text = outputDateString
         
         configGradient(for: cell)
     }
