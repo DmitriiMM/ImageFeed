@@ -17,6 +17,22 @@ final class ProfileViewController: UIViewController {
         let image = UIImage(systemName: "person.crop.circle.fill")
         let imageView = UIImageView(image: image)
         imageView.tintColor = .gray
+        
+        //MARK: - Gradient for Image View
+        gradient.frame = CGRect(origin: .zero, size: CGSize(width: 70, height: 70))
+        gradient.locations = [0, 0.1, 0.3]
+        gradient.colors = [
+            UIColor(red: 0.682, green: 0.686, blue: 0.706, alpha: 1).cgColor,
+            UIColor(red: 0.531, green: 0.533, blue: 0.553, alpha: 1).cgColor,
+            UIColor(red: 0.431, green: 0.433, blue: 0.453, alpha: 1).cgColor
+        ]
+        gradient.startPoint = CGPoint(x: 0, y: 0.5)
+        gradient.endPoint = CGPoint(x: 1, y: 0.5)
+        gradient.cornerRadius = 35
+        gradient.masksToBounds = true
+        animationLayers.insert(gradient)
+        imageView.layer.addSublayer(gradient)
+        
         return imageView
     }()
     
@@ -25,6 +41,22 @@ final class ProfileViewController: UIViewController {
         label.text = "Екатерина Новикова"
         label.font = UIFont.systemFont(ofSize: 23, weight: .bold)
         label.textColor = UIColor(named: "YP White")
+        
+        //MARK: - Gradient for NAME Label
+        gradientForNameLabel.frame = CGRect(origin: .zero, size: CGSize(width: 300, height: 26))
+        gradientForNameLabel.locations = [0, 0.1, 0.3]
+        gradientForNameLabel.colors = [
+            UIColor(red: 0.682, green: 0.686, blue: 0.706, alpha: 1).cgColor,
+            UIColor(red: 0.531, green: 0.533, blue: 0.553, alpha: 1).cgColor,
+            UIColor(red: 0.431, green: 0.433, blue: 0.453, alpha: 1).cgColor
+        ]
+        gradientForNameLabel.startPoint = CGPoint(x: 0, y: 0.5)
+        gradientForNameLabel.endPoint = CGPoint(x: 1, y: 0.5)
+        gradientForNameLabel.cornerRadius = 13
+        gradientForNameLabel.masksToBounds = true
+        animationLayers.insert(gradientForNameLabel)
+        label.layer.insertSublayer(gradientForNameLabel, at: 0)
+        
         return label
     }()
     
@@ -33,6 +65,22 @@ final class ProfileViewController: UIViewController {
         label.text = "@ekaterina_nov"
         label.font = UIFont.systemFont(ofSize: 13)
         label.textColor = UIColor(named: "YP Grey")
+        
+        //MARK: - Gradient for LINK Label
+        gradientForLinkLabel.frame = CGRect(origin: .zero, size: CGSize(width: 150, height: 18))
+        gradientForLinkLabel.locations = [0, 0.1, 0.3]
+        gradientForLinkLabel.colors = [
+            UIColor(red: 0.682, green: 0.686, blue: 0.706, alpha: 1).cgColor,
+            UIColor(red: 0.531, green: 0.533, blue: 0.553, alpha: 1).cgColor,
+            UIColor(red: 0.431, green: 0.433, blue: 0.453, alpha: 1).cgColor
+        ]
+        gradientForLinkLabel.startPoint = CGPoint(x: 0, y: 0.5)
+        gradientForLinkLabel.endPoint = CGPoint(x: 1, y: 0.5)
+        gradientForLinkLabel.cornerRadius = 9
+        gradientForLinkLabel.masksToBounds = true
+        animationLayers.insert(gradientForLinkLabel)
+        label.layer.insertSublayer(gradientForLinkLabel, at: 0)
+        
         return label
     }()
     
@@ -41,6 +89,22 @@ final class ProfileViewController: UIViewController {
         label.text = "Hello, world!"
         label.font = UIFont.systemFont(ofSize: 13)
         label.textColor = UIColor(named: "YP White")
+        
+        //MARK: - Gradient for DESCRIPTOIN Label
+        gradientForDescriptionLabel.frame = CGRect(origin: .zero, size: CGSize(width: 120, height: 18))
+        gradientForDescriptionLabel.locations = [0, 0.1, 0.3]
+        gradientForDescriptionLabel.colors = [
+            UIColor(red: 0.682, green: 0.686, blue: 0.706, alpha: 1).cgColor,
+            UIColor(red: 0.531, green: 0.533, blue: 0.553, alpha: 1).cgColor,
+            UIColor(red: 0.431, green: 0.433, blue: 0.453, alpha: 1).cgColor
+        ]
+        gradientForDescriptionLabel.startPoint = CGPoint(x: 0, y: 0.5)
+        gradientForDescriptionLabel.endPoint = CGPoint(x: 1, y: 0.5)
+        gradientForDescriptionLabel.cornerRadius = 9
+        gradientForDescriptionLabel.masksToBounds = true
+        animationLayers.insert(gradientForDescriptionLabel)
+        label.layer.insertSublayer(gradientForDescriptionLabel, at: 0)
+        
         return label
     }()
     
@@ -57,75 +121,11 @@ final class ProfileViewController: UIViewController {
     
     private var profileImageServiceObserver: NSObjectProtocol?
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        //MARK: - Gradient for Image View
-       
-        gradient.frame = CGRect(origin: .zero, size: CGSize(width: 70, height: 70))
-        gradient.locations = [0, 0.1, 0.3]
-        gradient.colors = [
-            UIColor(red: 0.682, green: 0.686, blue: 0.706, alpha: 1).cgColor,
-            UIColor(red: 0.531, green: 0.533, blue: 0.553, alpha: 1).cgColor,
-            UIColor(red: 0.431, green: 0.433, blue: 0.453, alpha: 1).cgColor
-        ]
-        gradient.startPoint = CGPoint(x: 0, y: 0.5)
-        gradient.endPoint = CGPoint(x: 1, y: 0.5)
-        gradient.cornerRadius = 35
-        gradient.masksToBounds = true
-        animationLayers.insert(gradient)
-        profileImageView.layer.addSublayer(gradient)
-        
-        //MARK: - Gradient for NAME Label
-        
-        gradientForNameLabel.frame = CGRect(origin: CGPoint(x: -13, y: 0), size: CGSize(width: 300, height: 26))
-        gradientForNameLabel.locations = [0, 0.1, 0.3]
-        gradientForNameLabel.colors = [
-            UIColor(red: 0.682, green: 0.686, blue: 0.706, alpha: 1).cgColor,
-            UIColor(red: 0.531, green: 0.533, blue: 0.553, alpha: 1).cgColor,
-            UIColor(red: 0.431, green: 0.433, blue: 0.453, alpha: 1).cgColor
-        ]
-        gradientForNameLabel.startPoint = CGPoint(x: 0, y: 0.5)
-        gradientForNameLabel.endPoint = CGPoint(x: 1, y: 0.5)
-        gradientForNameLabel.cornerRadius = 13
-        gradientForNameLabel.masksToBounds = true
-        animationLayers.insert(gradientForNameLabel)
-        profileNameLabel.layer.insertSublayer(gradientForNameLabel, at: 0)
-        
-        //MARK: - Gradient for LINK Label
-       
-        gradientForLinkLabel.frame = CGRect(origin: CGPoint(x: -13, y: 0), size: CGSize(width: 150, height: 18))
-        gradientForLinkLabel.locations = [0, 0.1, 0.3]
-        gradientForLinkLabel.colors = [
-            UIColor(red: 0.682, green: 0.686, blue: 0.706, alpha: 1).cgColor,
-            UIColor(red: 0.531, green: 0.533, blue: 0.553, alpha: 1).cgColor,
-            UIColor(red: 0.431, green: 0.433, blue: 0.453, alpha: 1).cgColor
-        ]
-        gradientForLinkLabel.startPoint = CGPoint(x: 0, y: 0.5)
-        gradientForLinkLabel.endPoint = CGPoint(x: 1, y: 0.5)
-        gradientForLinkLabel.cornerRadius = 9
-        gradientForLinkLabel.masksToBounds = true
-        animationLayers.insert(gradientForLinkLabel)
-        profileLinkLabel.layer.insertSublayer(gradientForLinkLabel, at: 0)
-        
-        //MARK: - Gradient for DESCRIPTOIN Label
-        
-        gradientForDescriptionLabel.frame = CGRect(origin: CGPoint(x: -13, y: 0), size: CGSize(width: 120, height: 18))
-        gradientForDescriptionLabel.locations = [0, 0.1, 0.3]
-        gradientForDescriptionLabel.colors = [
-            UIColor(red: 0.682, green: 0.686, blue: 0.706, alpha: 1).cgColor,
-            UIColor(red: 0.531, green: 0.533, blue: 0.553, alpha: 1).cgColor,
-            UIColor(red: 0.431, green: 0.433, blue: 0.453, alpha: 1).cgColor
-        ]
-        gradientForDescriptionLabel.startPoint = CGPoint(x: 0, y: 0.5)
-        gradientForDescriptionLabel.endPoint = CGPoint(x: 1, y: 0.5)
-        gradientForDescriptionLabel.cornerRadius = 9
-        gradientForDescriptionLabel.masksToBounds = true
-        animationLayers.insert(gradientForDescriptionLabel)
-        profileDescriptionLabel.layer.insertSublayer(gradientForDescriptionLabel, at: 0)
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = UIColor(named: "YP Black")
         
         //MARK: - Animation for all gradients
-       
         gradientChangeAnimation.duration = 1.0
         gradientChangeAnimation.repeatCount = .infinity
         gradientChangeAnimation.fromValue = [0, 0.1, 0.3]
@@ -134,11 +134,6 @@ final class ProfileViewController: UIViewController {
         gradientForNameLabel.add(gradientChangeAnimation, forKey: "locationsChange")
         gradientForLinkLabel.add(gradientChangeAnimation, forKey: "locationsChange")
         gradientForDescriptionLabel.add(gradientChangeAnimation, forKey: "locationsChange")
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = UIColor(named: "YP Black")
         
         addSubViews()
         addConstraints()
@@ -169,13 +164,8 @@ final class ProfileViewController: UIViewController {
             .processor(RoundCornerImageProcessor(cornerRadius: 16, backgroundColor: .clear)),
             .cacheSerializer(FormatIndicatedCacheSerializer.png)
         ])
-        self.animationLayers.removeAll()
-        self.gradient.removeFromSuperlayer()
-        self.gradientForNameLabel.removeFromSuperlayer()
-        self.gradientForLinkLabel.removeFromSuperlayer()
-        self.gradientForDescriptionLabel.removeFromSuperlayer()
-       
         profileImageView.clipsToBounds = true
+        removeGradient()
     }
     
     private func addConstraints() {
@@ -223,11 +213,18 @@ final class ProfileViewController: UIViewController {
         self.present(authViewController, animated: true)
     }
     
-
-    
     func updateProfileDetails(profile: Profile) {
         self.profileNameLabel.text = profile.name
         self.profileLinkLabel.text = profile.loginName
         self.profileDescriptionLabel.text = profile.bio
+    }
+    
+    func removeGradient() {
+        self.animationLayers.removeAll()
+//        self.gradient.removeAllAnimations()
+        self.gradient.removeFromSuperlayer()
+        self.gradientForNameLabel.removeFromSuperlayer()
+        self.gradientForLinkLabel.removeFromSuperlayer()
+        self.gradientForDescriptionLabel.removeFromSuperlayer()
     }
 }

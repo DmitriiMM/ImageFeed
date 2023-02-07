@@ -29,7 +29,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="141"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="fH4-ea-jDS">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="fH4-ea-jDS">
                                                     <rect key="frame" x="16" y="11" width="382" height="130"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -55,7 +55,7 @@
                                                     <rect key="frame" x="16" y="111" width="382" height="30"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="27 августа 2022" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DGh-rv-rGG">
-                                                            <rect key="frame" x="8" y="12" width="101.5" height="10"/>
+                                                            <rect key="frame" x="8" y="12" width="101.5" height="13"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <nil key="highlightedColor"/>
@@ -64,7 +64,7 @@
                                                     <constraints>
                                                         <constraint firstItem="DGh-rv-rGG" firstAttribute="top" secondItem="d6y-zl-0Qh" secondAttribute="topMargin" constant="4" id="3jJ-iV-y2h"/>
                                                         <constraint firstItem="DGh-rv-rGG" firstAttribute="leading" secondItem="d6y-zl-0Qh" secondAttribute="leadingMargin" id="DCg-zX-JTp"/>
-                                                        <constraint firstAttribute="bottom" secondItem="DGh-rv-rGG" secondAttribute="bottom" constant="8" id="ElD-ub-XM7"/>
+                                                        <constraint firstAttribute="bottomMargin" secondItem="DGh-rv-rGG" secondAttribute="bottom" constant="8" id="ElD-ub-XM7"/>
                                                         <constraint firstAttribute="height" constant="30" id="HNk-4k-Wth"/>
                                                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="DGh-rv-rGG" secondAttribute="trailing" constant="20" symbolic="YES" id="V1m-jL-YyY"/>
                                                     </constraints>
@@ -76,7 +76,7 @@
                                             <color key="backgroundColor" name="YP Black"/>
                                             <constraints>
                                                 <constraint firstItem="fH4-ea-jDS" firstAttribute="leading" secondItem="MCJ-2o-LOL" secondAttribute="leading" constant="16" id="1NE-Ud-cbC"/>
-                                                <constraint firstAttribute="bottom" secondItem="DGh-rv-rGG" secondAttribute="bottom" constant="8" id="4GV-Z7-QFz"/>
+                                                <constraint firstAttribute="bottom" secondItem="DGh-rv-rGG" secondAttribute="bottom" constant="5" id="4GV-Z7-QFz"/>
                                                 <constraint firstItem="d6y-zl-0Qh" firstAttribute="trailing" secondItem="fH4-ea-jDS" secondAttribute="trailing" id="Jww-39-nUD"/>
                                                 <constraint firstAttribute="trailing" secondItem="fH4-ea-jDS" secondAttribute="trailing" constant="16" id="Kz8-eG-Ugv"/>
                                                 <constraint firstItem="d6y-zl-0Qh" firstAttribute="leading" secondItem="fH4-ea-jDS" secondAttribute="leading" id="Qq8-PB-KPB"/>
@@ -331,7 +331,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="0" width="200" height="132"/>
         <image name="NoActive" width="30" height="26"/>
         <image name="buttonSharing" width="51" height="51"/>
         <image name="chevron.backward" catalog="system" width="97" height="128"/>

@@ -12,9 +12,10 @@ final class ImagesListService {
     
     func fetchPhotosNextPage() {
         assert(Thread.isMainThread)
+        print("🟢🔴🟢🔴🟢🔴🟢🔴🟢 fetchPhotosNextPage() if task != nil start")
         if task != nil { return }
         task?.cancel()
-        
+        print("🟢🟢🟢🟢🟢 fetchPhotosNextPage.task != nil  ОКОКОКОКОКОК")
         let nextPage = lastLoadedPage == nil ? 1 : lastLoadedPage! + 1
         lastLoadedPage = lastLoadedPage == nil ? 1 : nextPage
         
@@ -30,6 +31,7 @@ final class ImagesListService {
                 guard let self else { return }
                 switch result {
                 case .success(let photoResult):
+                    print("🧲🔆♻️🧲🔆♻️🧲🔆♻️ fetchPhotosNextPage.success")
                     var photosArray: [Photo] = []
                     for photo in photoResult {
                         let onePhoto = Photo(photoResult: photo)
@@ -43,10 +45,12 @@ final class ImagesListService {
                             object: self,
                             userInfo: ["photos": self.photos])
                 case .failure(let error):
+                    print("Ⓜ️🆗🈳🎦Ⓜ️🆗🈳🎦 fetchPhotosNextPage.failure")
                     print(error)
                 }
             }
         }
+        print("🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢 fetchPhotosNextPage.task.resume()")
         task.resume()
     }
     
