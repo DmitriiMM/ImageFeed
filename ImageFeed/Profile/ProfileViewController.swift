@@ -43,7 +43,7 @@ final class ProfileViewController: UIViewController {
         label.textColor = UIColor(named: "YP White")
         
         //MARK: - Gradient for NAME Label
-        gradientForNameLabel.frame = CGRect(origin: .zero, size: CGSize(width: 300, height: 26))
+        gradientForNameLabel.frame = CGRect(origin: CGPoint(x: 0, y: 10), size: CGSize(width: 300, height: 18))
         gradientForNameLabel.locations = [0, 0.1, 0.3]
         gradientForNameLabel.colors = [
             UIColor(red: 0.682, green: 0.686, blue: 0.706, alpha: 1).cgColor,
@@ -52,7 +52,7 @@ final class ProfileViewController: UIViewController {
         ]
         gradientForNameLabel.startPoint = CGPoint(x: 0, y: 0.5)
         gradientForNameLabel.endPoint = CGPoint(x: 1, y: 0.5)
-        gradientForNameLabel.cornerRadius = 13
+        gradientForNameLabel.cornerRadius = 9
         gradientForNameLabel.masksToBounds = true
         animationLayers.insert(gradientForNameLabel)
         label.layer.insertSublayer(gradientForNameLabel, at: 0)
@@ -67,7 +67,7 @@ final class ProfileViewController: UIViewController {
         label.textColor = UIColor(named: "YP Grey")
         
         //MARK: - Gradient for LINK Label
-        gradientForLinkLabel.frame = CGRect(origin: .zero, size: CGSize(width: 150, height: 18))
+        gradientForLinkLabel.frame = CGRect(origin: CGPoint(x: 0, y: -1), size: CGSize(width: 150, height: 18))
         gradientForLinkLabel.locations = [0, 0.1, 0.3]
         gradientForLinkLabel.colors = [
             UIColor(red: 0.682, green: 0.686, blue: 0.706, alpha: 1).cgColor,
@@ -125,16 +125,7 @@ final class ProfileViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "YP Black")
         
-        //MARK: - Animation for all gradients
-        gradientChangeAnimation.duration = 1.0
-        gradientChangeAnimation.repeatCount = .infinity
-        gradientChangeAnimation.fromValue = [0, 0.1, 0.3]
-        gradientChangeAnimation.toValue = [0, 0.8, 1]
-        gradient.add(gradientChangeAnimation, forKey: "locationsChange")
-        gradientForNameLabel.add(gradientChangeAnimation, forKey: "locationsChange")
-        gradientForLinkLabel.add(gradientChangeAnimation, forKey: "locationsChange")
-        gradientForDescriptionLabel.add(gradientChangeAnimation, forKey: "locationsChange")
-        
+        animateGradients()
         addSubViews()
         addConstraints()
         
@@ -166,6 +157,18 @@ final class ProfileViewController: UIViewController {
         ])
         profileImageView.clipsToBounds = true
         removeGradient()
+    }
+    
+    private func animateGradients() {
+        gradientChangeAnimation.duration = 1.0
+        gradientChangeAnimation.repeatCount = .infinity
+        gradientChangeAnimation.fromValue = [0, 0.1, 0.3]
+        gradientChangeAnimation.toValue = [0, 0.8, 1]
+        gradient.add(gradientChangeAnimation, forKey: "locationsChange")
+        gradientForNameLabel.add(gradientChangeAnimation, forKey: "locationsChange")
+        gradientForLinkLabel.add(gradientChangeAnimation, forKey: "locationsChange")
+        gradientForDescriptionLabel.add(gradientChangeAnimation, forKey: "locationsChange")
+        
     }
     
     private func addConstraints() {
@@ -213,15 +216,14 @@ final class ProfileViewController: UIViewController {
         self.present(authViewController, animated: true)
     }
     
-    func updateProfileDetails(profile: Profile) {
+    private func updateProfileDetails(profile: Profile) {
         self.profileNameLabel.text = profile.name
         self.profileLinkLabel.text = profile.loginName
         self.profileDescriptionLabel.text = profile.bio
     }
     
-    func removeGradient() {
+    private func removeGradient() {
         self.animationLayers.removeAll()
-//        self.gradient.removeAllAnimations()
         self.gradient.removeFromSuperlayer()
         self.gradientForNameLabel.removeFromSuperlayer()
         self.gradientForLinkLabel.removeFromSuperlayer()

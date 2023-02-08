@@ -22,7 +22,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <color key="backgroundColor" name="YP Black"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ImagesListCell" rowHeight="141" id="7Ij-Ym-Rey" customClass="ImagesListCell" customModule="ImageFeed" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ImagesListCell" rowHeight="141" id="7Ij-Ym-Rey" customClass="ImagesListCell" customModule="ImageFeed" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="50" width="414" height="141"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="7Ij-Ym-Rey" id="MCJ-2o-LOL">
@@ -30,7 +30,10 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="fH4-ea-jDS">
-                                                    <rect key="frame" x="16" y="11" width="382" height="130"/>
+                                                    <rect key="frame" x="16" y="8" width="382" height="133"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="200" id="axU-qe-MwF"/>
+                                                    </constraints>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                                             <integer key="value" value="16"/>
@@ -44,7 +47,7 @@
                                                         <constraint firstAttribute="width" constant="21" id="z21-s3-liH"/>
                                                     </constraints>
                                                     <state key="normal" title="Button"/>
-                                                    <buttonConfiguration key="configuration" style="plain" image="NoActive" title="">
+                                                    <buttonConfiguration key="configuration" style="plain" image="Active" title="">
                                                         <color key="baseForegroundColor" red="1" green="0.036709969359999997" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                     </buttonConfiguration>
                                                     <connections>
@@ -64,7 +67,6 @@
                                                     <constraints>
                                                         <constraint firstItem="DGh-rv-rGG" firstAttribute="top" secondItem="d6y-zl-0Qh" secondAttribute="topMargin" constant="4" id="3jJ-iV-y2h"/>
                                                         <constraint firstItem="DGh-rv-rGG" firstAttribute="leading" secondItem="d6y-zl-0Qh" secondAttribute="leadingMargin" id="DCg-zX-JTp"/>
-                                                        <constraint firstAttribute="bottomMargin" secondItem="DGh-rv-rGG" secondAttribute="bottom" constant="8" id="ElD-ub-XM7"/>
                                                         <constraint firstAttribute="height" constant="30" id="HNk-4k-Wth"/>
                                                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="DGh-rv-rGG" secondAttribute="trailing" constant="20" symbolic="YES" id="V1m-jL-YyY"/>
                                                     </constraints>
@@ -73,7 +75,6 @@
                                                     </userDefinedRuntimeAttributes>
                                                 </view>
                                             </subviews>
-                                            <color key="backgroundColor" name="YP Black"/>
                                             <constraints>
                                                 <constraint firstItem="fH4-ea-jDS" firstAttribute="leading" secondItem="MCJ-2o-LOL" secondAttribute="leading" constant="16" id="1NE-Ud-cbC"/>
                                                 <constraint firstAttribute="bottom" secondItem="DGh-rv-rGG" secondAttribute="bottom" constant="5" id="4GV-Z7-QFz"/>
@@ -86,9 +87,10 @@
                                                 <constraint firstItem="d6y-zl-0Qh" firstAttribute="width" secondItem="fH4-ea-jDS" secondAttribute="width" id="l1y-Zw-FKh"/>
                                                 <constraint firstItem="jVO-ad-vlX" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="MCJ-2o-LOL" secondAttribute="leading" constant="20" symbolic="YES" id="njL-n5-2x7"/>
                                                 <constraint firstAttribute="bottom" secondItem="fH4-ea-jDS" secondAttribute="bottom" id="oZV-R7-f2V"/>
-                                                <constraint firstItem="fH4-ea-jDS" firstAttribute="top" secondItem="MCJ-2o-LOL" secondAttribute="topMargin" id="pwN-6u-JfX"/>
+                                                <constraint firstItem="fH4-ea-jDS" firstAttribute="top" secondItem="MCJ-2o-LOL" secondAttribute="top" constant="8" id="pwN-6u-JfX"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" name="YP Black"/>
                                         <connections>
                                             <outlet property="dateLabelCell" destination="DGh-rv-rGG" id="j8N-4o-d4K"/>
                                             <outlet property="gradientViewCell" destination="d6y-zl-0Qh" id="Qxo-AV-CIl"/>
@@ -331,7 +333,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="NoActive" width="30" height="26"/>
+        <image name="Active" width="30" height="26"/>
         <image name="buttonSharing" width="51" height="51"/>
         <image name="chevron.backward" catalog="system" width="97" height="128"/>
         <image name="logoOfUnsplash" width="60" height="60"/>
