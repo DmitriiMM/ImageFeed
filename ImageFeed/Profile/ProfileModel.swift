@@ -7,9 +7,9 @@ struct Profile {
     let bio: String
     
     init(profileResult: ProfileResponseBody) {
-        username = profileResult.username ?? "User name"
-        name = (profileResult.firstName ?? "Profile owner First name") + " " + (profileResult.lastName ?? "Profile owner Last name")
-        loginName = "@" + (profileResult.username ?? "Link")
-        bio = profileResult.bio ?? "Profile's description"
+        username = profileResult.username ?? ""
+        name = (profileResult.firstName ?? "") + " " + (profileResult.lastName ?? "")
+        loginName = "@" + (profileResult.username ?? "")
+        bio = profileResult.bio ?? ""
     }
 }

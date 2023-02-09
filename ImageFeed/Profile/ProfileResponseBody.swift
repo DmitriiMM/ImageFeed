@@ -4,10 +4,10 @@ struct ProfileResponseBody: Decodable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        username = try container.decode(String.self, forKey: .username)
-        firstName = try container.decode(String.self, forKey: .firstName)
-        lastName = try container.decode(String.self, forKey: .lastName)
-        bio = try container.decode(String.self, forKey: .bio)
+        username = try? container.decode(String.self, forKey: .username)
+        firstName = try? container.decode(String.self, forKey: .firstName)
+        lastName = try? container.decode(String.self, forKey: .lastName)
+        bio = try? container.decode(String.self, forKey: .bio)
     }
     
     let username: String?

@@ -10,20 +10,29 @@ final class ImagesListViewController: UIViewController {
     private let imagesListService = ImagesListService.shared
     
     private var imagesListServiceObserver: NSObjectProtocol?
+    let isoDateFormatter = ISO8601DateFormatter()
     
-    private lazy var inputDateFormatter: DateFormatter = {
-        let inputDateFormatter = DateFormatter()
-        inputDateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-        
-        return inputDateFormatter
-    }()
+//    private lazy var inputDateFormatter: DateFormatter = {
+//        let inputDateFormatter = DateFormatter()
+//        inputDateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+//
+//        return inputDateFormatter
+//    }()
+//
+//    private lazy var outputDateFormatter: DateFormatter = {
+//        let outputDateFormatter = DateFormatter()
+//        outputDateFormatter.dateFormat = "dd MMMM yyyy"
+//        outputDateFormatter.locale = Locale(identifier: "ru_RU")
+//
+//        return outputDateFormatter
+//    }()
     
-    private lazy var outputDateFormatter: DateFormatter = {
-        let outputDateFormatter = DateFormatter()
-        outputDateFormatter.dateFormat = "dd MMMM yyyy"
-        outputDateFormatter.locale = Locale(identifier: "ru_RU")
+    private lazy var dateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .long
+        dateFormatter.timeStyle = .none
         
-        return outputDateFormatter
+        return dateFormatter
     }()
     
     @IBOutlet private var tableView: UITableView!
@@ -119,9 +128,8 @@ final class ImagesListViewController: UIViewController {
             cell.likeButtonCell.setImage(UIImage(named: "NoActive"), for: .normal)
         }
         
-        if let inputDate = inputDateFormatter.date(from: photos[indexPath.row].createdAt) {
-            let outputDateString = outputDateFormatter.string(from: inputDate)
-            cell.dateLabelCell.text = outputDateString
+        if let date = isoDateFormatter.date(from: photos[indexPath.row].createdAt) {
+            cell.dateLabelCell.text = dateFormatter.string(from: date)
         }
         
         configBottomGradient(for: cell)

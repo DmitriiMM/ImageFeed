@@ -207,13 +207,22 @@ final class ProfileViewController: UIViewController {
     }
     
     @objc private func logOutButtonTapped(_ sender: Any) {
-        tokenStorage.token
-        clean()
         let storyboard = UIStoryboard(name: "Main", bundle: .main)
-        guard
-            let authViewController = storyboard.instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController else { return }
+        guard let authViewController = storyboard.instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController else { return }
         authViewController.modalPresentationStyle = .fullScreen
-        self.present(authViewController, animated: true)
+        
+        let alert = UIAlertController(title: "Пока, пока!", message: "Уверены что хотите выйти?", preferredStyle: .alert)
+        let completion: (UIAlertAction) -> Void = { [weak self] _ in
+            self?.present(authViewController, animated: true)
+            self?.tokenStorage.token = nil
+            self?.clean()
+        }
+        
+        let actionYes = UIAlertAction(title: "Да", style: .cancel, handler: completion)
+        let actionNo = UIAlertAction(title: "Нет", style: .default)
+        alert.addAction(actionYes)
+        alert.addAction(actionNo)
+        self.present(alert, animated: true)
     }
     
     private func updateProfileDetails(profile: Profile) {
