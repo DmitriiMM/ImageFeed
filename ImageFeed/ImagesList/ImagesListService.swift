@@ -16,7 +16,6 @@ final class ImagesListService {
         task?.cancel()
         
         let nextPage = lastLoadedPage == nil ? 1 : lastLoadedPage! + 1
-        lastLoadedPage = lastLoadedPage == nil ? 1 : nextPage
         
         var request = URLRequest(url: URL(string: "/photos?page=\(nextPage)&&per_page=10", relativeTo: defaultBaseURL)!)
         request.httpMethod = "GET"
@@ -26,25 +25,24 @@ final class ImagesListService {
         
         let session = URLSession.shared
         let task = session.objectTask(for: request) { [weak self] (result: Result<[PhotoResult], Error>) in
-            DispatchQueue.main.async { [weak self] in
-                guard let self else { return }
-                switch result {
-                case .success(let photoResult):
-                    var photosArray: [Photo] = []
-                    for photo in photoResult {
-                        let onePhoto = Photo(photoResult: photo)
-                        photosArray.append(onePhoto)
-                    }
-                    self.photos.append(contentsOf: photosArray)
-                    
-                    NotificationCenter.default
-                        .post(
-                            name: ImagesListService.didChangeNotification,
-                            object: self,
-                            userInfo: ["photos": self.photos])
-                case .failure(let error):
-                    print(error)
+            guard let self else { return }
+            switch result {
+            case .success(let photoResult):
+                self.lastLoadedPage = self.lastLoadedPage == nil ? 1 : nextPage
+                var photosArray: [Photo] = []
+                for photo in photoResult {
+                    let onePhoto = Photo(photoResult: photo)
+                    photosArray.append(onePhoto)
                 }
+                self.photos.append(contentsOf: photosArray)
+                
+                NotificationCenter.default
+                    .post(
+                        name: ImagesListService.didChangeNotification,
+                        object: self,
+                        userInfo: ["photos": self.photos])
+            case .failure(let error):
+                print(error)
             }
         }
         task.resume()
@@ -82,33 +80,5 @@ final class ImagesListService {
                 }
             }
         }
-        task.resume()
-    }
-}
-
-struct Photo {
-    let id: String
-    let size: CGSize
-    let createdAt: String
-    let welcomeDescription: String?
-    let thumbImageURL: String
-    let largeImageURL: String
-    var isLiked: Bool
-    
-    init(photoResult: PhotoResult) {
-        id = photoResult.id
-        size = CGSize(width: photoResult.width, height: photoResult.height)
-        createdAt = photoResult.createdAt
-        welcomeDescription = photoResult.welcomeDescription
-        thumbImageURL = photoResult.urls.thumbImageURL
-        largeImageURL = photoResult.urls.largeImageURL
-        isLiked = photoResult.isLiked
-    }
-}
-
-struct LikedPhoto {
-    var likedPhoto: PhotoResult
-    init(likedPhotoResult: LikedPhotoResult) {
-        likedPhoto = likedPhotoResult.likedPhoto
     }
 }

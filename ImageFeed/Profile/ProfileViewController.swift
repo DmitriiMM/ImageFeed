@@ -90,7 +90,7 @@ final class ProfileViewController: UIViewController {
         label.font = UIFont.systemFont(ofSize: 13)
         label.textColor = UIColor(named: "YP White")
         
-        //MARK: - Gradient for DESCRIPTOIN Label
+        //MARK: - Gradient for DESCRIPTION Label
         gradientForDescriptionLabel.frame = CGRect(origin: .zero, size: CGSize(width: 120, height: 18))
         gradientForDescriptionLabel.locations = [0, 0.1, 0.3]
         gradientForDescriptionLabel.colors = [
@@ -207,8 +207,8 @@ final class ProfileViewController: UIViewController {
     }
     
     @objc private func logOutButtonTapped(_ sender: Any) {
-        OAuth2TokenStorage().token = nil
-        WebViewViewController.clean()
+        tokenStorage.token
+        clean()
         let storyboard = UIStoryboard(name: "Main", bundle: .main)
         guard
             let authViewController = storyboard.instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController else { return }
@@ -228,5 +228,16 @@ final class ProfileViewController: UIViewController {
         self.gradientForNameLabel.removeFromSuperlayer()
         self.gradientForLinkLabel.removeFromSuperlayer()
         self.gradientForDescriptionLabel.removeFromSuperlayer()
+    }
+}
+
+extension ProfileViewController: WebViewViewControllerCleanDelegate {
+    func clean() {
+        HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
+        WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
+            records.forEach { record in
+                WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
+            }
+        }
     }
 }

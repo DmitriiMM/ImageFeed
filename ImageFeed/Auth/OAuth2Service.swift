@@ -17,7 +17,7 @@ final class OAuth2Service {
                 guard self != nil else { return }
                 switch result {
                 case .success(let responseBody):
-                    let authToken = responseBody.accessTocken
+                    let authToken = responseBody.accessToken
                     completion(.success(authToken))
                 case .failure(let error):
                     completion(.failure(error))

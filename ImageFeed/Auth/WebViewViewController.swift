@@ -6,6 +6,10 @@ protocol WebViewViewControllerDelegate: AnyObject {
     func webViewViewControllerDidCancel(_ vc: WebViewViewController)
 }
 
+protocol WebViewViewControllerCleanDelegate: AnyObject {
+    func clean()
+}
+
 fileprivate let unsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
 
 
@@ -46,15 +50,6 @@ final class WebViewViewController: UIViewController {
     
     @IBAction private func didTapBackButton(_ sender: Any) {
         delegate?.webViewViewControllerDidCancel(self)
-    }
-    
-    static func clean() {
-       HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
-       WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
-          records.forEach { record in
-             WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
-          }
-       }
     }
 }
 

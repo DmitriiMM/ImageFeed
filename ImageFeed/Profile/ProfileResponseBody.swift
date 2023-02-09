@@ -10,10 +10,10 @@ struct ProfileResponseBody: Decodable {
         bio = try container.decode(String.self, forKey: .bio)
     }
     
-    let username: String
-    let firstName: String
-    let lastName: String
-    let bio: String
+    let username: String?
+    let firstName: String?
+    let lastName: String?
+    let bio: String?
 }
 
 private enum CodingKeys: String, CodingKey {

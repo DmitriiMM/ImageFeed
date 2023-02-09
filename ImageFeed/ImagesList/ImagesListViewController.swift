@@ -75,25 +75,20 @@ final class ImagesListViewController: UIViewController {
     }
     
     private func configBottomGradient(for cell: ImagesListCell) {
-        cell.gradientButtomCell.colors = [
+        cell.gradientBottomCell.colors = [
             UIColor(red: 0.102, green: 0.106, blue: 0.133, alpha: 0).cgColor,
             UIColor(red: 0.102, green: 0.106, blue: 0.133, alpha: 0.5).cgColor
         ]
         
-        cell.gradientButtomCell.locations = [0, 1]
-        cell.gradientButtomCell.frame.size = cell.gradientViewCell.frame.size
-        cell.gradientViewCell.layer.insertSublayer(cell.gradientButtomCell, at: 0)
-    }
-    
-    private func setIsLiked(isLike: Bool) -> String {
-        let imageNameLike = isLike == true ? "NoActive" : "Active"
-        return imageNameLike
+        cell.gradientBottomCell.locations = [0, 1]
+        cell.gradientBottomCell.frame.size = cell.gradientViewCell.frame.size
+        cell.gradientViewCell.layer.insertSublayer(cell.gradientBottomCell, at: 0)
     }
     
     private func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
         cell.likeButtonCell.isHidden = true
         cell.dateLabelCell.isHidden = true
-        cell.gradientButtomCell.isHidden = true
+        cell.gradientBottomCell.isHidden = true
         cell.gradientLoading = addForGradient(on: cell.imageCell)
         
         let imageURL = self.photos[indexPath.row].thumbImageURL
@@ -110,7 +105,7 @@ final class ImagesListViewController: UIViewController {
                 cell.gradientLoading.removeFromSuperlayer()
                 cell.likeButtonCell.isHidden = false
                 cell.dateLabelCell.isHidden = false
-                cell.gradientButtomCell.isHidden = false
+                cell.gradientBottomCell.isHidden = false
                 self.animationLayers.removeAll()
             case .failure(let error):
                 print(error)
@@ -118,11 +113,9 @@ final class ImagesListViewController: UIViewController {
             }
         }
         
-        let like = self.photos[indexPath.row].isLiked
-        switch like {
-        case true:
+        if self.photos[indexPath.row].isLiked {
             cell.likeButtonCell.setImage(UIImage(named: "Active"), for: .normal)
-        case false:
+        } else {
             cell.likeButtonCell.setImage(UIImage(named: "NoActive"), for: .normal)
         }
         
@@ -204,21 +197,29 @@ extension ImagesListViewController: UITableViewDataSource {
 
 extension ImagesListViewController: ImagesListCellDelegate {
     func imageListCellDidTapLike(_ cell: ImagesListCell) {
-        photos = imagesListService.photos
         guard let indexPath = tableView.indexPath(for: cell) else { return }
         let photo = photos[indexPath.row]
         UIBlockingProgressHUD.show()
         imagesListService.changeLike(photoId: photo.id, isLike: photo.isLiked) { result in
+            UIBlockingProgressHUD.dismiss()
             switch result {
             case .success():
-                let imageNameLike = self.setIsLiked(isLike: photo.isLiked)
-                guard let image = UIImage(named: imageNameLike) else { return }
-                cell.likeButtonCell.setImage(image, for: .normal)
-                UIBlockingProgressHUD.dismiss()
-            case .failure(_):
-                UIBlockingProgressHUD.dismiss()
-                break
+                self.photos = self.imagesListService.photos
+                cell.setIsLiked(isLike: self.photos[indexPath.row].isLiked)
+            case .failure(let error):
+                self.showAlert(with: error)
             }
         }
     }
+    
+    private func showAlert(with error: Error) {
+        let alert = UIAlertController(title: "Лайки сломались", message: "Ошибка - \(error)", preferredStyle: .alert)
+        let action = UIAlertAction(title: "Ок", style: .cancel)
+        alert.addAction(action)
+        self.present(alert, animated: true)
+    }
 }
+
+
+
+

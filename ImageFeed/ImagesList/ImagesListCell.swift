@@ -7,7 +7,7 @@ protocol ImagesListCellDelegate: AnyObject {
 
 final class ImagesListCell: UITableViewCell {
     static let reuseIdentifier = "ImagesListCell"
-    let gradientButtomCell = CAGradientLayer()
+    let gradientBottomCell = CAGradientLayer()
     var gradientLoading = CAGradientLayer()
     weak var delegate: ImagesListCellDelegate?
     
@@ -30,5 +30,14 @@ final class ImagesListCell: UITableViewCell {
         super.draw(rect)
         
         gradientLoading.frame.size = imageCell.frame.size
+    }
+    
+    func setIsLiked(isLike: Bool) {
+        switch isLike {
+        case true:
+            likeButtonCell.imageView?.image = UIImage(named: "Active")
+        case false:
+            likeButtonCell.imageView?.image = UIImage(named: "NoActive")
+        }
     }
 }

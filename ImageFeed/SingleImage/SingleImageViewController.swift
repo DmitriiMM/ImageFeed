@@ -32,7 +32,8 @@ final class SingleImageViewController: UIViewController {
     
     private func setImage() {
         UIBlockingProgressHUD.show()
-        let url = URL(string: fullImageUrl!)
+        guard let urlString = fullImageUrl else { return }
+        let url = URL(string: urlString)
         DispatchQueue.main.async {
             self.imageView.kf.setImage(with: url) { [weak self] result in
                 UIBlockingProgressHUD.dismiss()
