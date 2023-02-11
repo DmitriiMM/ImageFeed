@@ -6,12 +6,12 @@ final class ProfileViewController: UIViewController {
     
     private let profileService = ProfileService.shared
     private let tokenStorage = OAuth2TokenStorage()
-    var animationLayers = Set<CALayer>()
-    let gradient = CAGradientLayer()
-    let gradientForNameLabel = CAGradientLayer()
-    let gradientForLinkLabel = CAGradientLayer()
-    let gradientForDescriptionLabel = CAGradientLayer()
-    let gradientChangeAnimation = CABasicAnimation(keyPath: "locations")
+    private var animationLayers = Set<CALayer>()
+    private let gradient = CAGradientLayer()
+    private let gradientForNameLabel = CAGradientLayer()
+    private let gradientForLinkLabel = CAGradientLayer()
+    private let gradientForDescriptionLabel = CAGradientLayer()
+    private let gradientChangeAnimation = CABasicAnimation(keyPath: "locations")
     
     private lazy var profileImageView: UIImageView = {
         let image = UIImage(systemName: "person.crop.circle.fill")
@@ -207,15 +207,14 @@ final class ProfileViewController: UIViewController {
     }
     
     @objc private func logOutButtonTapped(_ sender: Any) {
-        let storyboard = UIStoryboard(name: "Main", bundle: .main)
-        guard let authViewController = storyboard.instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController else { return }
-        authViewController.modalPresentationStyle = .fullScreen
-        
         let alert = UIAlertController(title: "Пока, пока!", message: "Уверены что хотите выйти?", preferredStyle: .alert)
         let completion: (UIAlertAction) -> Void = { [weak self] _ in
-            self?.present(authViewController, animated: true)
+
             self?.tokenStorage.token = nil
             self?.clean()
+            guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
+            window.rootViewController = SplashViewController()
+            window.makeKeyAndVisible()
         }
         
         let actionYes = UIAlertAction(title: "Да", style: .cancel, handler: completion)

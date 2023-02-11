@@ -12,7 +12,6 @@ class OAuth2TokenStorage {
                 KeychainWrapper.standard.set(token, forKey: Keys.token.rawValue)
             } else {
                 KeychainWrapper.standard.removeObject(forKey: Keys.token.rawValue)
-                print(" 🔰🔰🔰 token - \(token)")
             }
         }
     }

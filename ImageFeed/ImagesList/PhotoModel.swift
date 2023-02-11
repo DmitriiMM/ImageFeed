@@ -21,7 +21,7 @@ struct Photo {
 }
 
 struct LikedPhoto {
-    var likedPhoto: PhotoResult
+    let likedPhoto: PhotoResult
     init(likedPhotoResult: LikedPhotoResult) {
         likedPhoto = likedPhotoResult.likedPhoto
     }

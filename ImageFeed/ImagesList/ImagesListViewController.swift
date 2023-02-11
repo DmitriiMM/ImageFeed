@@ -2,35 +2,18 @@ import UIKit
 import Kingfisher
 
 final class ImagesListViewController: UIViewController {
-    var animationLayers = Set<CALayer>()
-    let gradientChangeAnimation = CABasicAnimation(keyPath: "locations")
-    
-    var photos: [Photo] = []
+    private var photos: [Photo] = []
     private let showSingleImageSegueIdentifier = "ShowSingleImage"
     private let imagesListService = ImagesListService.shared
     
     private var imagesListServiceObserver: NSObjectProtocol?
-    let isoDateFormatter = ISO8601DateFormatter()
-    
-//    private lazy var inputDateFormatter: DateFormatter = {
-//        let inputDateFormatter = DateFormatter()
-//        inputDateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-//
-//        return inputDateFormatter
-//    }()
-//
-//    private lazy var outputDateFormatter: DateFormatter = {
-//        let outputDateFormatter = DateFormatter()
-//        outputDateFormatter.dateFormat = "dd MMMM yyyy"
-//        outputDateFormatter.locale = Locale(identifier: "ru_RU")
-//
-//        return outputDateFormatter
-//    }()
-    
+    private let isoDateFormatter = ISO8601DateFormatter()
+
     private lazy var dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .long
         dateFormatter.timeStyle = .none
+        dateFormatter.locale = Locale(identifier: "ru_RU")
         
         return dateFormatter
     }()
@@ -95,10 +78,8 @@ final class ImagesListViewController: UIViewController {
     }
     
     private func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
-        cell.likeButtonCell.isHidden = true
-        cell.dateLabelCell.isHidden = true
-        cell.gradientBottomCell.isHidden = true
-        cell.gradientLoading = addForGradient(on: cell.imageCell)
+        cell.configLoadingGradient(for: cell.imageCell)
+        cell.contentView.bringSubviewToFront(cell.imageCell)
         
         let imageURL = self.photos[indexPath.row].thumbImageURL
         let url = URL(string: imageURL)
@@ -111,65 +92,21 @@ final class ImagesListViewController: UIViewController {
             case .success(_):
                 self.tableView.reloadRows(at: [indexPath], with: .automatic)
                 cell.imageCell.kf.indicatorType = .none
+                cell.contentView.sendSubviewToBack(cell.imageCell)
                 cell.gradientLoading.removeFromSuperlayer()
-                cell.likeButtonCell.isHidden = false
-                cell.dateLabelCell.isHidden = false
-                cell.gradientBottomCell.isHidden = false
-                self.animationLayers.removeAll()
             case .failure(let error):
                 print(error)
                 cell.imageCell.kf.indicatorType = .none
             }
         }
         
-        if self.photos[indexPath.row].isLiked {
-            cell.likeButtonCell.setImage(UIImage(named: "Active"), for: .normal)
-        } else {
-            cell.likeButtonCell.setImage(UIImage(named: "NoActive"), for: .normal)
-        }
+        cell.setIsLiked(isLike: self.photos[indexPath.row].isLiked)
         
         if let date = isoDateFormatter.date(from: photos[indexPath.row].createdAt) {
             cell.dateLabelCell.text = dateFormatter.string(from: date)
         }
         
         configBottomGradient(for: cell)
-    }
-    
-    private func addForGradient(on superView: UIImageView) -> CAGradientLayer {
-        let gradientForCell = CAGradientLayer()
-        
-        gradientForCell.frame = CGRect(
-            origin:
-                CGPoint(x: 0, y: 0),
-            size:
-                CGSize(
-                    width: superView.frame.width,
-                    height: superView.frame.height
-                )
-        )
-        
-        gradientForCell.locations = [0, 0.1, 0.3]
-        gradientForCell.colors = [
-            UIColor(red: 0.682, green: 0.686, blue: 0.706, alpha: 1).cgColor,
-            UIColor(red: 0.531, green: 0.533, blue: 0.553, alpha: 1).cgColor,
-            UIColor(red: 0.431, green: 0.433, blue: 0.453, alpha: 1).cgColor
-        ]
-        
-        gradientForCell.startPoint = CGPoint(x: 0, y: 0.5)
-        gradientForCell.endPoint = CGPoint(x: 1, y: 0.5)
-        gradientForCell.cornerRadius = 16
-        gradientForCell.masksToBounds = true
-        superView.layer.addSublayer(gradientForCell)
-        
-        animationLayers.insert(gradientForCell)
-        
-        gradientChangeAnimation.duration = 1.0
-        gradientChangeAnimation.repeatCount = .infinity
-        gradientChangeAnimation.fromValue = [0, 0.1, 0.3]
-        gradientChangeAnimation.toValue = [0, 0.8, 1]
-        gradientForCell.add(gradientChangeAnimation, forKey: "locationsChange")
-        
-        return gradientForCell
     }
 }
 
@@ -208,7 +145,8 @@ extension ImagesListViewController: ImagesListCellDelegate {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
         let photo = photos[indexPath.row]
         UIBlockingProgressHUD.show()
-        imagesListService.changeLike(photoId: photo.id, isLike: photo.isLiked) { result in
+        imagesListService.changeLike(photoId: photo.id, isLike: photo.isLiked) { [weak self] result in
+            guard let self = self else { return }
             UIBlockingProgressHUD.dismiss()
             switch result {
             case .success():

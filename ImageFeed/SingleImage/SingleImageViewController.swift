@@ -2,13 +2,6 @@ import UIKit
 
 final class SingleImageViewController: UIViewController {
     var fullImageUrl: String?
-    var image: UIImage! {
-        didSet {
-            guard isViewLoaded else { return }
-            imageView.image = image
-            rescaleAndCenterImageInScrollView(image: image)
-        }
-    }
     
     @IBOutlet private var imageView: UIImageView!
     @IBOutlet private var scrollView: UIScrollView!
@@ -25,7 +18,8 @@ final class SingleImageViewController: UIViewController {
     }
     
     @IBAction private func didTapShareButton(_ sender: Any) {
-        let ac = UIActivityViewController(activityItems: [image], applicationActivities: nil)
+        guard let item = imageView.image else { return }
+        let ac = UIActivityViewController(activityItems: [item], applicationActivities: nil)
         
         present(ac, animated: true, completion: nil)
     }
@@ -85,7 +79,6 @@ extension SingleImageViewController: UIScrollViewDelegate {
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         func centerImageInScrollView(image: UIImage) {
             let visibleRectSize = scrollView.bounds.size
-            let imageSize = image.size
             let newContentSize = scrollView.contentSize
             let x = (newContentSize.width - visibleRectSize.width) / 2
             let y = (newContentSize.height - visibleRectSize.height) / 2

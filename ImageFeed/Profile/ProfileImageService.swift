@@ -36,7 +36,6 @@ final class ProfileImageService {
             }
         }
         self.task = task
-        task.resume()
     }
     
     private func makeRequest(

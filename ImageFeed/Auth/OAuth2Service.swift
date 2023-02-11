@@ -25,7 +25,6 @@ final class OAuth2Service {
             }
         }
         self.task = task
-        task.resume()
     }
     
     private func makeRequest(code: String) -> URLRequest {

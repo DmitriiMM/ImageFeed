@@ -24,7 +24,7 @@ final class ImagesListService {
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         
         let session = URLSession.shared
-        let task = session.objectTask(for: request) { [weak self] (result: Result<[PhotoResult], Error>) in
+        session.objectTask(for: request) { [weak self] (result: Result<[PhotoResult], Error>) in
             guard let self else { return }
             switch result {
             case .success(let photoResult):
@@ -45,7 +45,6 @@ final class ImagesListService {
                 print(error)
             }
         }
-        task.resume()
     }
     
     func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
@@ -59,7 +58,7 @@ final class ImagesListService {
         }
         
         let session = URLSession.shared
-        let task = session.objectTask(for: request) { [weak self] (result: Result<LikedPhotoResult, Error>) in
+        session.objectTask(for: request) { [weak self] (result: Result<LikedPhotoResult, Error>) in
             DispatchQueue.main.async { [weak self] in
                 guard let self else { return }
                 switch result {
@@ -70,8 +69,7 @@ final class ImagesListService {
                     if let index = self.photos.firstIndex(where: { $0.id == photoId }) {
                         var photo = self.photos[index]
                         photo.isLiked = newPhoto.likedPhoto.isLiked
-                        self.photos.remove(at: index)
-                        self.photos.insert(photo, at: index)
+                        self.photos[index] = photo
                         
                         completion(.success(()))
                     }

@@ -100,13 +100,10 @@ extension SplashViewController: AuthViewControllerDelegate {
                 self.profileImageService.fetchProfileImageURL(username: profile.username) { _ in  }
                 self.switchToTabBarController()
             case .failure(let error):
-                DispatchQueue.main.async {
-                    guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
-                    window.rootViewController = self
-                    window.makeKeyAndVisible()
-                    self.showAlert(with: error)
-                }
-                UIBlockingProgressHUD.dismiss()
+                guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
+                window.rootViewController = self
+                window.makeKeyAndVisible()
+                self.showAlert(with: error)
             }
             UIBlockingProgressHUD.dismiss()
         }
