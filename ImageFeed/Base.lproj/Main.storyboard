@@ -304,7 +304,7 @@
                                 </connections>
                             </button>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1Vd-KV-5Ui">
-                                <rect key="frame" x="0.0" y="131" width="414" height="4"/>
+                                <rect key="frame" x="0.0" y="48" width="414" height="4"/>
                                 <color key="progressTintColor" name="YP Black"/>
                             </progressView>
                         </subviews>
@@ -315,7 +315,7 @@
                             <constraint firstItem="RYh-gD-YY6" firstAttribute="top" secondItem="7Tv-kf-Cus" secondAttribute="top" constant="59" id="B61-rI-Gab"/>
                             <constraint firstAttribute="bottom" secondItem="GGJ-d9-MOu" secondAttribute="bottom" id="BGV-0m-vfW"/>
                             <constraint firstItem="1Vd-KV-5Ui" firstAttribute="leading" secondItem="GWi-OI-vKd" secondAttribute="leading" id="FrU-f1-OaJ"/>
-                            <constraint firstItem="1Vd-KV-5Ui" firstAttribute="top" secondItem="RYh-gD-YY6" secondAttribute="bottom" id="IAO-b1-o5U"/>
+                            <constraint firstItem="1Vd-KV-5Ui" firstAttribute="top" secondItem="7Tv-kf-Cus" secondAttribute="top" id="IAO-b1-o5U"/>
                             <constraint firstItem="RYh-gD-YY6" firstAttribute="leading" secondItem="7Tv-kf-Cus" secondAttribute="leading" constant="16" id="LaW-wa-R4B"/>
                             <constraint firstAttribute="trailing" secondItem="1Vd-KV-5Ui" secondAttribute="trailing" id="q7X-N9-8Or"/>
                             <constraint firstItem="GGJ-d9-MOu" firstAttribute="top" secondItem="GWi-OI-vKd" secondAttribute="top" id="tEQ-8M-8Fg"/>

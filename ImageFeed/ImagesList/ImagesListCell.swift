@@ -9,8 +9,16 @@ final class ImagesListCell: UITableViewCell {
     static let reuseIdentifier = "ImagesListCell"
     let gradientBottomCell = CAGradientLayer()
     var gradientLoading = CAGradientLayer()
-    private let gradientChangeAnimation = CABasicAnimation(keyPath: "locations")
     weak var delegate: ImagesListCellDelegate?
+    
+    private lazy var gradientChangeAnimation: CAAnimation = {
+        let gradientChangeAnimation =  CABasicAnimation(keyPath: "locations")
+        gradientChangeAnimation.duration = 1.0
+        gradientChangeAnimation.repeatCount = .infinity
+        gradientChangeAnimation.fromValue = [0, 0.1, 0.3]
+        gradientChangeAnimation.toValue = [0, 0.8, 1]
+        return gradientChangeAnimation
+    }()
     
     @IBOutlet var imageCell: UIImageView!
     @IBOutlet var dateLabelCell: UILabel!
@@ -66,10 +74,6 @@ final class ImagesListCell: UITableViewCell {
         gradientLoading.masksToBounds = true
         imageView.layer.addSublayer(gradientLoading)
         
-        gradientChangeAnimation.duration = 1.0
-        gradientChangeAnimation.repeatCount = .infinity
-        gradientChangeAnimation.fromValue = [0, 0.1, 0.3]
-        gradientChangeAnimation.toValue = [0, 0.8, 1]
         gradientLoading.add(gradientChangeAnimation, forKey: "locationsChange")
     }
 }
