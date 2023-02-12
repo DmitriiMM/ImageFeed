@@ -14,7 +14,7 @@ final class ProfileImageService {
         if lastCode == username { return }
                 task?.cancel()
                 lastCode = username
-        let request = makeRequest(path: "/users/\(username)", httpMethod: "GET", baseURL: defaultBaseURL!)
+        let request = makeRequest(path: "/users/\(username)", httpMethod: "GET", baseURL: DefaultBaseURL)
         
         let session = URLSession.shared
         let task = session.objectTask(for: request) { [weak self] (result: Result<UserResult, Error>) in
@@ -41,7 +41,7 @@ final class ProfileImageService {
     private func makeRequest(
         path: String,
         httpMethod: String,
-        baseURL: URL = defaultBaseURL!
+        baseURL: URL = DefaultBaseURL
     ) -> URLRequest {
         var request = URLRequest(url: URL(string: path, relativeTo: baseURL)!)
         request.setValue("Bearer \(String(describing: OAuth2TokenStorage().token!))", forHTTPHeaderField: "Authorization")
