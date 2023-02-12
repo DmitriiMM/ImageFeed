@@ -6,16 +6,22 @@ final class TabBarController: UITabBarController {
         let storyboard = UIStoryboard(name: "Main", bundle: .main)
         let imagesListViewController = storyboard.instantiateViewController(withIdentifier: "ImagesListViewController")
         imagesListViewController.tabBarItem = UITabBarItem(
-            title: NSLocalizedString("Images", comment: ""),
-            image: UIImage(systemName: "rectangle.stack.fill"),
-            selectedImage: nil
+            title: nil,
+            image: UIImage(named: "FolderNoActive"),
+            selectedImage: UIImage(named: "FolderActive")
         )
+        
+        imagesListViewController.tabBarItem.imageInsets = UIEdgeInsets(top: 5, left: -15, bottom: -15, right: -15)
+        
         let profileViewController = ProfileViewController()
         profileViewController.tabBarItem = UITabBarItem(
-            title: NSLocalizedString("Profile", comment: ""),
-            image: UIImage(systemName: "person.crop.circle.fill"),
-            selectedImage: nil
+            title: nil,
+            image: UIImage(named: "PersonNoActive"),
+            selectedImage: UIImage(named: "PersonActive")
         )
+        
+        profileViewController.tabBarItem.imageInsets = UIEdgeInsets(top: 5, left: -15, bottom: -15, right: -15)
+        
         self.viewControllers = [imagesListViewController, profileViewController]
     }
 }

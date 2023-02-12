@@ -6,7 +6,11 @@ protocol WebViewViewControllerDelegate: AnyObject {
     func webViewViewControllerDidCancel(_ vc: WebViewViewController)
 }
 
-fileprivate let UnsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
+protocol WebViewViewControllerCleanDelegate: AnyObject {
+    func clean()
+}
+
+fileprivate let unsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
 
 
 final class WebViewViewController: UIViewController {
@@ -28,7 +32,7 @@ final class WebViewViewController: UIViewController {
              })
         webView.navigationDelegate = self
         
-        var urlComponents = URLComponents(string: UnsplashAuthorizeURLString)!
+        var urlComponents = URLComponents(string: unsplashAuthorizeURLString)!
         urlComponents.queryItems = [
             URLQueryItem(name: "client_id", value: accessKey),
             URLQueryItem(name: "redirect_uri", value: redirectURI),

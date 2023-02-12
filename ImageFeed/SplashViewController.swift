@@ -80,14 +80,13 @@ extension SplashViewController: AuthViewControllerDelegate {
         oauth2Service.fetchOAuthToken(code) { [weak self] result in
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
+                UIBlockingProgressHUD.dismiss()
                 switch result {
                 case .success(let bearerToken):
                     self.oauth2TokenStorage.store(token: bearerToken)
                     self.fetchProfile(token: bearerToken)
                     self.switchToTabBarController()
-                    UIBlockingProgressHUD.dismiss()
                 case .failure(let error):
-                    UIBlockingProgressHUD.dismiss()
                     self.showAlert(with: error)
                 }
             }
@@ -101,13 +100,10 @@ extension SplashViewController: AuthViewControllerDelegate {
                 self.profileImageService.fetchProfileImageURL(username: profile.username) { _ in  }
                 self.switchToTabBarController()
             case .failure(let error):
-                DispatchQueue.main.async {
-                    guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
-                    window.rootViewController = self
-                    window.makeKeyAndVisible()
-                    self.showAlert(with: error)
-                    UIBlockingProgressHUD.dismiss()
-                }
+                guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
+                window.rootViewController = self
+                window.makeKeyAndVisible()
+                self.showAlert(with: error)
             }
             UIBlockingProgressHUD.dismiss()
         }
