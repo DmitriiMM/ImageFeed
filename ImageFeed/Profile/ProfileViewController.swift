@@ -123,6 +123,7 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
             action: #selector(logOutButtonTapped)
         )
         button.tintColor = UIColor(named: "YP Red")
+        button.accessibilityIdentifier = "logoutButton"
         return button
     }()
     
@@ -216,6 +217,10 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
         let actionNo = UIAlertAction(title: "Нет", style: .default)
         alert.addAction(actionYes)
         alert.addAction(actionNo)
+        
+        alert.restorationIdentifier = "Пока, пока!"
+        actionYes.accessibilityIdentifier = "Yes"
+        
         self.present(alert, animated: true)
     }
     
