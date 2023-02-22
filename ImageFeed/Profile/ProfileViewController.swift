@@ -2,10 +2,17 @@ import UIKit
 import Kingfisher
 import WebKit
 
-final class ProfileViewController: UIViewController {
+public protocol ProfileViewControllerProtocol: AnyObject {
+    var presenter: ProfilePresenterProtocol? { get set }
+    
+    func updateAvatar()
+}
+
+final class ProfileViewController: UIViewController & ProfileViewControllerProtocol {
+    var presenter: ProfilePresenterProtocol?
     
     private let profileService = ProfileService.shared
-    private let tokenStorage = OAuth2TokenStorage()
+    let tokenStorage = OAuth2TokenStorage()
     private var animationLayers = Set<CALayer>()
     private let gradient = CAGradientLayer()
     private let gradientForNameLabel = CAGradientLayer()
@@ -116,10 +123,9 @@ final class ProfileViewController: UIViewController {
             action: #selector(logOutButtonTapped)
         )
         button.tintColor = UIColor(named: "YP Red")
+        button.accessibilityIdentifier = "logoutButton"
         return button
     }()
-    
-    private var profileImageServiceObserver: NSObjectProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -129,23 +135,13 @@ final class ProfileViewController: UIViewController {
         addSubViews()
         addConstraints()
         
+        presenter?.viewDidLoad()
+        
         guard let profile = profileService.profile else { return }
         updateProfileDetails(profile: profile)
-        
-        profileImageServiceObserver = NotificationCenter.default
-            .addObserver(
-                forName: ProfileImageService.didChangeNotification,
-                object: nil,
-                queue: .main
-            ) { [weak self] _ in
-                guard let self = self else { return }
-                
-                self.updateAvatar()
-            }
-        updateAvatar()
     }
     
-    private func updateAvatar() {
+    func updateAvatar() {
         guard
             let avatarURL = ProfileImageService.shared.avatarURL,
             let url = URL(string: avatarURL)
@@ -221,6 +217,10 @@ final class ProfileViewController: UIViewController {
         let actionNo = UIAlertAction(title: "Нет", style: .default)
         alert.addAction(actionYes)
         alert.addAction(actionNo)
+        
+        alert.restorationIdentifier = "Пока, пока!"
+        actionYes.accessibilityIdentifier = "Yes"
+        
         self.present(alert, animated: true)
     }
     

@@ -32,9 +32,9 @@ final class OAuth2Service {
         guard let url = URL(string: urlString) else { fatalError("Failed to create URL") }
         
         let parameters = [
-            "client_id": accessKey,
-            "client_secret": secretKey,
-            "redirect_uri": redirectURI,
+            "client_id": AccessKey,
+            "client_secret": SecretKey,
+            "redirect_uri": RedirectURI,
             "code": code,
             "grant_type": "authorization_code"
         ]

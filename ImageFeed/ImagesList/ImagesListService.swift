@@ -17,7 +17,7 @@ final class ImagesListService {
         
         let nextPage = lastLoadedPage == nil ? 1 : lastLoadedPage! + 1
         
-        var request = URLRequest(url: URL(string: "/photos?page=\(nextPage)&&per_page=10", relativeTo: defaultBaseURL)!)
+        var request = URLRequest(url: URL(string: "/photos?page=\(nextPage)&&per_page=10", relativeTo: DefaultBaseURL)!)
         request.httpMethod = "GET"
         
         let token = OAuth2TokenStorage().token!
@@ -48,7 +48,7 @@ final class ImagesListService {
     }
     
     func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
-        var request = URLRequest(url: URL(string: "/photos/\(photoId)/like", relativeTo: defaultBaseURL)!)
+        var request = URLRequest(url: URL(string: "/photos/\(photoId)/like", relativeTo: DefaultBaseURL)!)
         let token = OAuth2TokenStorage().token!
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         if isLike {

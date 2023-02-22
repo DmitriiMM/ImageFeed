@@ -18,7 +18,7 @@ final class ProfileService {
         if lastCode == token { return }
                 task?.cancel()
                 lastCode = token
-        let requestUrlString = defaultBaseURL!.absoluteString + "/me"
+        let requestUrlString = DefaultBaseURL.absoluteString + "/me"
         guard let requestUrl = URL(string: requestUrlString) else { return }
         var request = URLRequest(url: requestUrl)
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
